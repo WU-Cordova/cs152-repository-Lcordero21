@@ -6,32 +6,56 @@ class Bag(IBag[T]):
     def __init__(self, *items: Optional[Iterable[T]]) -> None:
         self._bag: dict[T, int] = {}
 
-        if items is not None:
-            for item in items:
-                self.add(item)
-
     def add(self, item: T) -> None:
-        if item in self._bags:
-            self._bag[item] += 1
+        if item is not None:
+            if item in self._bag:
+                self._bag[item] += 1
+            else:
+                self._bag[item] = 1
         else:
-            self._bag[item] = 1
-        if item is None:
             raise TypeError
 
     def remove(self, item: T) -> None:
-        raise NotImplementedError("remove method not implemented")
+        if item is not None:
+            if item in self._bag:
+                count=self._bag[item]
+                if count==0:
+                    raise ValueError
+                else:
+                    self._bag[item]=count-1
+            else:
+                raise ValueError
+        else:
+            raise ValueError
 
     def count(self, item: T) -> int:
-        return self._bag[item]
+        if item is not None:
+            if item in self._bag:
+                return self._bag[item]
+            else:
+                return 0
+        else:
+            raise TypeError
+        
+
 
     def __len__(self) -> int:
-        raise NotImplementedError("__len__ method not implemented")
+        totalItems=0
+        for items in self._bag:
+            totalItems+=self._bag[items]
+        return totalItems
 
     def distinct_items(self) -> Iterable[T]:
-        raise NotImplementedError("distinct_items method not implemented")
+        itemsList=[]
+        for key in self._bag:
+            itemsList.append(key)
+        return itemsList
 
     def __contains__(self, item) -> bool:
-        raise NotImplementedError("__contains__ method not implemented")
+        if item in self._bag:
+            return True
+        else:
+            return False
 
     def clear(self) -> None:
-        raise NotImplementedError("clear method not implemented")
+        self._bag = {}
