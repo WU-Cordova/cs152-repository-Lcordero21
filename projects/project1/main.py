@@ -1,0 +1,3 @@
+import program
+
+player=Character()
