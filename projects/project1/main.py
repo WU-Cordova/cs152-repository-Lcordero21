@@ -1,3 +1,1 @@
 import program
-
-player=Character()
