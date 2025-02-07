@@ -1,14 +1,15 @@
 import random
 from datastructures.bag import Bag
-from card import Card, CardSuit, CardFace
+from project1.card import Card, CardSuit, CardFace
 
 def main():
     card_suits = [suit.value for suit in list(CardSuit)]
-    card_suit = []
+    cards = []
     for suit in list(CardSuit):
-        card_suit.append(Card(suit.value))
+        for face in list(CardFace):
+            cards.append(Card(suit.value, face.value))
 
-    print(card_suit)
+    print(cards)
 
 
 
