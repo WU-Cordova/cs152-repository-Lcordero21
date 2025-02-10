@@ -134,7 +134,7 @@ def game(playerScore,dealerScore,deck_bag,playerCards,dealerCards):
         print("It's a tie! Both Player's Bust!")
         endGame(playerCards,playerScore,dealerCards,dealerScore)
 
-
+ 
 
 #The prompt to end the game (or continue)!        
 def endGame(playerCards,playerScore,dealerCards,dealerScore):
