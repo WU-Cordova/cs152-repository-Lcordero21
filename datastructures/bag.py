@@ -5,6 +5,9 @@ from datastructures.ibag import IBag, T
 class Bag(IBag[T]):
     def __init__(self, *items: Optional[Iterable[T]]) -> None:
         self._bag: dict[T, int] = {}
+        if items is not None: 
+            for i in items:
+                self.add(i)
 
     def add(self, item: T) -> None:
         if item is not None:

@@ -1,7 +1,6 @@
-import copy
 from dataclasses import dataclass
 from enum import Enum
-import random
+
 
 class CardSuit(Enum):
     HEARTS = "♥"
