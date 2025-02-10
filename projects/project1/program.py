@@ -12,7 +12,9 @@ deck_bag=[]
 
 def main():
     #The below code initializes the decks we are pulling from 
-    deck_bag=[] #This will clear 
+    deck_bag=[] #This will clear everything
+    playerCards=[]
+    dealerCards=[]
 
     one_deck_list = [Card(face, suit) for suit in CardSuit for face in CardFace]
     print(f"One deck has {len(one_deck_list)} cards")
@@ -61,6 +63,7 @@ def main():
 
     game(playerScore,dealerScore,deck_bag,playerCards,dealerCards)
 
+
 def game(playerScore,dealerScore,deck_bag,playerCards,dealerCards):
     turn="P" #P is player and D is Dealer
     playerStatus= "Playing"
@@ -91,6 +94,7 @@ def game(playerScore,dealerScore,deck_bag,playerCards,dealerCards):
                 dealerStatus="Lost"
         else:
             turn = "D"
+
         if turn == "D" and dealerStatus == "Playing":
             if dealerScore < 17:
                 newCard=random.choice(list(deck_bag.distinct_items()))
@@ -103,8 +107,33 @@ def game(playerScore,dealerScore,deck_bag,playerCards,dealerCards):
                 turn= "P"
         else:
             turn="P"
-            
-            
+
+    if playerStatus == "Stay" and dealerStatus == "Stay":
+        if playerScore > dealerScore:
+            print("Player wins! Congrats!")
+            endGame()
+        if playerScore == dealerScore:
+            print("It's a tie!")
+            endGame()
+    if playerStatus == "Won":
+            print("Player wins! Congrats!")
+            endGame()
+    if playerScore>21:
+        print("Player Bust! Dealer Wins!")
+        endGame()
+
+
+
+#The prompt to end the game (or continue)!        
+def endGame():
+    userInput=input("Would you like to play again?(Y)es or (N)o?").upper()
+    if userInput == "Y":
+        main()
+    if userInput == "N":
+            exit()
+    else:
+        print("Please input either Y for Yes or N for No.")
+
 
 
 
