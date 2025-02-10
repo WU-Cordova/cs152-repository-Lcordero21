@@ -34,9 +34,9 @@ def main():
     for item in playerCards:
         deck_bag.remove(item)
 
-
-    if playerScore > 21:
-        playerScore -= 10
+    for card in playerCards:
+        if (card.card_face == CardFace.ACE) and (playerScore > 21):
+            playerScore -= 10
 
     print(f"Player's Hand: {"".join(str(card) for card in playerCards)} | Score: {playerScore}")
 
@@ -50,8 +50,9 @@ def main():
     for item in dealerCards:
         deck_bag.remove(item)
 
-    if dealerScore > 21:
-        dealerScore -= 10
+    for card in dealerCards:
+        if (card.card_face == CardFace.ACE) and (dealerScore > 21):
+            dealerScore -= 10
 
     print(f"Dealer's Hand: {dealerCards[0]} [Hidden] | Score: {dealerCards[0].card_face.face_value()}")
 
@@ -75,7 +76,8 @@ def game(playerScore,dealerScore,deck_bag,playerCards,dealerCards):
                     newCard=random.choice(list(deck_bag.distinct_items()))
                     playerCards.append(newCard)
                     deck_bag.remove(newCard)
-
+                    if (newCard.card_face == "A") and (playerScore > 21):
+                        playerScore -= 10
                     playerScore= sum(card.card_face.face_value() for card in playerCards)
                     print(f"Player's Hand: {"".join(str(card) for card in playerCards)} | Score: {playerScore}")
 
@@ -99,6 +101,8 @@ def game(playerScore,dealerScore,deck_bag,playerCards,dealerCards):
                 dealerCards.append(newCard)
                 deck_bag.remove(newCard)
                 dealerScore= sum(card.card_face.face_value() for card in dealerCards)
+                if (newCard.card_face == "A") and (dealerScore > 21):
+                    dealerScore -= 10
                 print("Dealer's Hand:", dealerCards[0], (len(dealerCards)-1)*"[Hidden]"," | Score:",dealerCards[0].card_face.face_value())
             
             if playerStatus == "Playing":
@@ -115,19 +119,19 @@ def game(playerScore,dealerScore,deck_bag,playerCards,dealerCards):
         if playerScore > dealerScore:
             print("Player wins! Congrats!")
             endGame(playerCards,playerScore,dealerCards,dealerScore)
-        if playerScore == dealerScore:
+        elif playerScore == dealerScore:
             print("It's a tie!")
             endGame(playerCards,playerScore,dealerCards,dealerScore)
-    if playerStatus == "Won":
+    elif playerStatus == "Won":
             print("Player wins! Congrats!")
             endGame(playerCards,playerScore,dealerCards,dealerScore)
-    if dealerStatus == 21:
+    elif dealerStatus == 21:
             print("Dealer got a BlackJack. Player Lost!")
             endGame(playerCards,playerScore,dealerCards,dealerScore)
-    if playerScore>21 and dealerScore < 22:
+    elif playerScore>21 and dealerScore < 22:
         print("Player Bust! Dealer Wins!")
         endGame(playerCards,playerScore,dealerCards,dealerScore)
-    if dealerScore>21 and playerScore < 22:
+    elif dealerScore>21 and playerScore < 22:
         print("Dealer Bust! Player Wins, Congrats!")
         endGame(playerCards,playerScore,dealerCards,dealerScore)
     else:
@@ -145,8 +149,12 @@ def endGame(playerCards,playerScore,dealerCards,dealerScore):
     userInput=input("Would you like to play again?(Y)es or (N)o?").upper()
     if userInput == "Y":
         main()
-    if userInput == "N":
-            exit()
+    elif userInput == "N":
+        exit()
+    elif userInput == "H":
+        print("Please input either Y for Yes or N for No.")
+    elif userInput == "S":
+        print("Please input either Y for Yes or N for No.")
     else:
         print("Please input either Y for Yes or N for No.")
 

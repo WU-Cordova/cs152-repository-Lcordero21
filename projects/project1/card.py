@@ -9,7 +9,7 @@ class CardSuit(Enum):
     DIAMONDS = "♦"
 
 class CardFace(Enum):
-    ACE = "11" #remember ace is a special case where it can also equal 1 if it causes a bust
+    ACE = "A" #remember ace is a special case where it can also equal 1 if it causes a bust
     TWO = "2"
     THREE = "3"
     FOUR = "4"
@@ -22,6 +22,7 @@ class CardFace(Enum):
     JACK="J"
     QUEEN="Q"
     KING = "K"
+
     def face_value(self) -> int:
         match self:
             case CardFace.JACK | CardFace.QUEEN | CardFace.KING:
