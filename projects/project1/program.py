@@ -92,13 +92,20 @@ def game(playerScore,dealerScore,deck_bag,playerCards,dealerCards):
         else:
             turn = "D"
         if turn == "D" and dealerStatus == "Playing":
-            if dealerScore != 21:
-                if dealerScore < 17:
-                    newCard=random.choice(list(deck_bag.distinct_items()))
-                    dealerCards.append(newCard)
-                    deck_bag.remove(newCard)
+            if dealerScore < 17:
+                newCard=random.choice(list(deck_bag.distinct_items()))
+                dealerCards.append(newCard)
+                deck_bag.remove(newCard)
+                print("Dealer's Hand:", dealerCards[0], (len(dealerCards)-1)*"[Hidden]"," | Score:",dealerCards[0].card_face.face_value())
+                turn = "P"
+            else:
+                dealerStatus = "Stay"
+                turn= "P"
+        else:
+            turn="P"
+            
+            
 
-                    
 
 
                 
