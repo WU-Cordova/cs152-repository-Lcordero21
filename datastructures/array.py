@@ -73,9 +73,20 @@ class Array(IArray[T]):
             raise IndexError
         if type(item) != type(self.__items):
             raise TypeError
-
+        
     def append(self, data: T) -> None:
-        raise NotImplementedError('Append not implemented.')
+        __grow(self,self.__logical_size+1)
+
+        def __grow(self,newSize: int):
+            if newSize > self.__physical_size:
+                self.__physical_size = self.__physical_size * 2
+                newArray = np.empty(self.__physical_size, dtype=self.__data_type)
+                for index in range(len(self.__items)):
+                    newArray[index]=copy.deepcopy(self.__items[index])
+                self.__items = newArray
+            else:
+                pass
+
 
     def append_front(self, data: T) -> None:
         raise NotImplementedError('Append front not implemented.')
@@ -104,7 +115,10 @@ class Array(IArray[T]):
         return iter(self.__elements)
 
     def __reversed__(self) -> Iterator[T]:
-        raise NotImplementedError
+        newArray = []
+        for i in range(len(self.__elements)-1,-1,-1):
+            newArray.append(self.__elements[i])
+        return iter(newArray)
 
     def __delitem__(self, index: int) -> None:
        raise NotImplementedError('Delete not implemented.')
