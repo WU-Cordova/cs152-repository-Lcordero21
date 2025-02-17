@@ -25,12 +25,12 @@ class Array(IArray[T]):
         if not isinstance(data_type,type):
             raise TypeError
         self.__elements = starting_sequence
-        self.__logical_size: int = len(starting_sequence)
-        self.__physical_size: int = self.__logical_size
-        self.__data_type: type = data_type
-        self.__items: NDArray = np.empty(self.__physical_size, dtype = self.__data_type)
-        if self.__data_type != self.__items.dtype:
-            raise TypeError
+        self.__logical_size = len(starting_sequence)
+        self.__physical_size =  self.__logical_size
+        self.__data_type = data_type
+        self.__items = np.empty(self.__physical_size, dtype = self.__data_type)
+        #if type(starting_sequence) != data_type:
+            #raise TypeError #look at this line
 
 
     @overload
