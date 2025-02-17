@@ -29,7 +29,7 @@ class Array(IArray[T]):
         self.__physical_size =  self.__logical_size
         self.__data_type = data_type
         self.__items = np.empty(self.__physical_size, dtype = self.__data_type)
-        #if type(starting_sequence) != data_type:
+        #if type(self.__items) != data_type:
             #raise TypeError #look at this line
 
 
@@ -68,7 +68,11 @@ class Array(IArray[T]):
 
     
     def __setitem__(self, index: int, item: T) -> None:
-        raise NotImplementedError('Indexing not implemented.')
+        arrayRange= len(self.__items)
+        if index not in range(-arrayRange,arrayRange):
+            raise IndexError
+        if type(item) != type(self.__items):
+            raise TypeError
 
     def append(self, data: T) -> None:
         raise NotImplementedError('Append not implemented.')
@@ -83,22 +87,33 @@ class Array(IArray[T]):
         raise NotImplementedError('Pop front not implemented.')
 
     def __len__(self) -> int: 
-        raise NotImplementedError('Length not implemented.')
+        return self.__logical_size
 
     def __eq__(self, other: object) -> bool:
-        raise NotImplementedError('Equality not implemented.')
+        if not isinstance(other, Array):
+            return False
+        if self.__logical_size != other.__logical_size:
+            return False
+        else:
+            for index in range(self.__logical_size):
+                if other.__elements[index] != self.__elements[index]:
+                    return False
+        return True
     
     def __iter__(self) -> Iterator[T]:
-        raise NotImplementedError('Iteration not implemented.')
+        return iter(self.__elements)
 
     def __reversed__(self) -> Iterator[T]:
-        raise
+        raise NotImplementedError
 
     def __delitem__(self, index: int) -> None:
        raise NotImplementedError('Delete not implemented.')
 
     def __contains__(self, item: Any) -> bool:
-        raise NotImplementedError('Contains not implemented.')
+        for index in range(self.__logical_size):
+            if item == self.__elements[index]:
+                return True
+        return False
 
     def clear(self) -> None:
         raise NotImplementedError('Clear not implemented.')
