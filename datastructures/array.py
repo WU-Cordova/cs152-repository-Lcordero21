@@ -33,11 +33,29 @@ class Array(IArray[T]):
             NDArray[index]=copy.deepcopy(starting_sequence[index])
 
     @overload
-    def __getitem__(self, index: int) -> T: ...
+    def __getitem__(self, index: int) -> T:...
     @overload
     def __getitem__(self, index: slice) -> Sequence[T]: ...
     def __getitem__(self, index: int | slice) -> T | Sequence[T]:
-            raise NotImplementedError('Indexing not implemented.')
+        if isinstance (index,int):
+            arrayRange = len(self.__items)
+            if (index > (-len(self.__items)) and (index < len(self.__items))):
+                item = self.__items[index]
+                return item.item() if isinstance(item,np.generic) else item
+            else:
+                raise IndexError
+        if isinstance (index,slice):
+            start = (index.start if index.start is not None else 0)
+            stop = (index.stop if index.stop is not None else (len(self.__items)))
+            step = (index.step if index.step is not None else 1) 
+            if start in range(-arrayRange,arrayRange) and stop in range(-arrayRange,arrayRange) and step in range(-arrayRange,arrayRange):
+                sliced_items= self.__items[start:stop:step]
+                return Array(starting_sequence=sliced_items.tolist(), data_type=self.__data_type)
+            else:
+                raise IndexError
+        else:
+            raise TypeError
+
     
     def __setitem__(self, index: int, item: T) -> None:
         raise NotImplementedError('Indexing not implemented.')
