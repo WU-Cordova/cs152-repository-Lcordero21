@@ -11,6 +11,7 @@ import os
 from typing import Any, Iterator, overload
 import numpy as np
 from numpy.typing import NDArray
+from copy import copy
 
 
 from datastructures.iarray import IArray, T
@@ -19,14 +20,17 @@ from datastructures.iarray import IArray, T
 class Array(IArray[T]):  
 
     def __init__(self, starting_sequence: Sequence[T]=[], data_type: type=object) -> None: 
+        if not isinstance(starting_sequence, Sequence):
+            raise  ValueError
+        if not isinstance(data_type,type):
+            raise TypeError
         self.__logical_size: int = len(starting_sequence)
         self.__physical_size: int = self.__logical_size
         self.__data_type: type = data_type
-
-        if not ininstance(starting_sequence, Sequence):
-            raise  ValueError("starting sequence must be a valid sequence type")
-        
         self.__items: NDArray = np.empty(self.__logical_size, dtype = self.__data_type)
+
+        for index in self.__logical_size:
+            NDArray[index]=copy.deepcopy(starting_sequence[index])
 
     @overload
     def __getitem__(self, index: int) -> T: ...
