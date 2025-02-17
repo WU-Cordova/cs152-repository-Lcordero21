@@ -76,6 +76,15 @@ class Array(IArray[T]):
         
     def append(self, data: T) -> None:
         __grow(self,self.__logical_size+1)
+        self.__logical_size += 1
+        newArrayFr = np.empty(self.__physical_size, dtype=self.__data_type)
+        i=0
+        for index in range(len(self.__items)):
+            newArrayFr[index]=copy.deepcopy(self.__items[index])
+            i=index
+        newArrayFr[i+1]=copy.deepcopy(data)
+        
+        self.__items= newArrayFr
 
         def __grow(self,newSize: int):
             if newSize > self.__physical_size:
