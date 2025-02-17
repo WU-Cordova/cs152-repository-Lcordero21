@@ -27,10 +27,16 @@ class Array(IArray[T]):
         self.__logical_size: int = len(starting_sequence)
         self.__physical_size: int = self.__logical_size
         self.__data_type: type = data_type
-        self.__items: NDArray = np.empty(self.__logical_size, dtype = self.__data_type)
+        self.__items: NDArray = np.empty(self.__physical_size, dtype = self.__data_type)
+        if isinstance(data_type, int):
+            for index in range(starting_sequence):
+                self.__items[index]=copy.deepcopy(starting_sequence[index])
+        if isinstance(data_type,slice):
+            for index in range(self.__logical_size):
+                self.__items[index]=copy.deepcopy(starting_sequence[index])
+        else:
+            raise TypeError
 
-        for index in self.__logical_size:
-            NDArray[index]=copy.deepcopy(starting_sequence[index])
 
     @overload
     def __getitem__(self, index: int) -> T:...
