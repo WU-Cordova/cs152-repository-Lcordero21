@@ -7,7 +7,7 @@ class Bag(IBag[T]):
         self._bag: dict[T, int] = {}
         if items is not None: 
             for i in items:
-                self.add(i)
+                self.add(i) aaaa
 
     def add(self, item: T) -> None:
         if item is not None:
