@@ -11,7 +11,7 @@ import os
 from typing import Any, Iterator, overload
 import numpy as np
 from numpy.typing import NDArray
-from copy import copy
+import copy
 
 
 from datastructures.iarray import IArray, T
@@ -29,8 +29,8 @@ class Array(IArray[T]):
         self.__physical_size =  self.__logical_size
         self.__data_type = data_type
         self.__items = np.empty(self.__physical_size, dtype = self.__data_type)
-        #if type(self.__items) != data_type:
-            #raise TypeError #look at this line
+        if type(self.__elements[0]) != self.__data_type:
+            raise TypeError #look at this line
 
 
     @overload
@@ -39,7 +39,7 @@ class Array(IArray[T]):
     def __getitem__(self, index: slice) -> Sequence[T]: ...
     def __getitem__(self, index: int | slice) -> T | Sequence[T]:
         if isinstance(self.__data_type, int):
-            for index in range(self.__elements):
+            for index in range(self.__logical_size):
                 self.__items[index]=copy.deepcopy(self.__elements[index])
         elif isinstance(self.__data_type,slice):
             for index in range(self.__logical_size):
