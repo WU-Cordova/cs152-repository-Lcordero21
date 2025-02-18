@@ -49,16 +49,16 @@ class Array(IArray[T]):
         
         if isinstance (index,int):
             arrayRange = len(self.__items)
-            if (index > (-len(self.__items)) and (index < len(self.__items))):
+            if (index > (-len(self.__items)) and (index < len(self.__items)-1)):
                 item = self.__items[index]
                 return item.item() if isinstance(item,np.generic) else item
             else:
                 raise IndexError
-        if isinstance (index,slice):
+        elif isinstance (index,slice):
             start = (index.start if index.start is not None else 0)
-            stop = (index.stop if index.stop is not None else (len(self.__items)))
+            stop = (index.stop if index.stop is not None else (len(self.__items)-1))
             step = (index.step if index.step is not None else 1) 
-            if start in range(-arrayRange,arrayRange) and stop in range(-arrayRange,arrayRange) and step in range(-arrayRange,arrayRange):
+            if start in range(-arrayRange,arrayRange-1) and stop in range(-arrayRange,arrayRange-1) and step in range(-arrayRange,arrayRange-1):
                 sliced_items= self.__items[start:stop:step]
                 return Array(starting_sequence=sliced_items.tolist(), data_type=self.__data_type)
             else:
@@ -98,7 +98,24 @@ class Array(IArray[T]):
 
 
     def append_front(self, data: T) -> None:
-        raise NotImplementedError('Append front not implemented.')
+        __grow(self,self.__logical_size+1)
+        self.__logical_size += 1
+        newArrayFr = np.empty(self.__physical_size, dtype=self.__data_type)
+        i=0
+        newArrayFr[i]=copy.deepcopy(data)
+        for index in range(i+1,len(self.__items)):
+            newArrayFr[index]=copy.deepcopy(self.__items[index])
+            i=index        
+        self.__items= newArrayFr
+        def __grow(self,newSize: int):
+            if newSize > self.__physical_size:
+                self.__physical_size = self.__physical_size * 2
+                newArray = np.empty(self.__physical_size, dtype=self.__data_type)
+                for index in range(len(self.__items)):
+                    newArray[index]=copy.deepcopy(self.__items[index])
+                self.__items = newArray
+            else:
+                pass
 
     def pop(self) -> None:
         raise NotImplementedError('Pop not implemented.')
