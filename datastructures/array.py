@@ -41,11 +41,9 @@ class Array(IArray[T]):
         if isinstance(self.__data_type, int):
             for index in range(self.__elements):
                 self.__items[index]=copy.deepcopy(self.__elements[index])
-        if isinstance(self.__data_type,slice):
+        elif isinstance(self.__data_type,slice):
             for index in range(self.__logical_size):
                 self.__items[index]=copy.deepcopy(self.__elements[index])
-        else:
-            raise TypeError
         
         if isinstance (index,int):
             arrayRange = len(self.__items)
