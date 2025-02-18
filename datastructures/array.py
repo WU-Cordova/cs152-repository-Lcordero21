@@ -104,12 +104,13 @@ class Array(IArray[T]):
             return (self.__physical_size)
         
     def __delitem__(self, index: int) -> None:
-        size = self.decreaseSize(self.__logical_size-1)
-        self.__logical_size-=1        
+        size = self.decreaseSize(self.__logical_size-1)       
         newArray = np.empty(size, dtype = self.__data_type)
-        for i in range(len(self.__items)):
-           if i is not index:
+        for i in range(self.__logical_size):
+           if i != index:
                newArray[i]=copy.deepcopy(self.__items[i])
+        self.__items=newArray
+        self.__logical_size-=1 
 
             
     def pop(self) -> None:
