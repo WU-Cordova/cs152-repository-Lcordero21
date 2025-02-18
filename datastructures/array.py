@@ -27,7 +27,6 @@ class Array(IArray[T]):
         self.__elements = starting_sequence
         self.__logical_size = len(starting_sequence)
         self.__physical_size =  self.__logical_size
-        self.__original_capacity = self.__logical_size
         self.__data_type = data_type
         self.__items = np.empty(self.__physical_size, dtype = self.__data_type)
         #if type(self.__items) != data_type:
@@ -118,11 +117,24 @@ class Array(IArray[T]):
             else:
                 pass
 
+    def __delitem__(self, index: int) -> None:
+        size = decreaseSize(self.__logical_size-1)
+        self.__logical_size-=1        
+        newArray = np.empty(size, dtype = self.__data_type)
+        for i in range(len(self.__items)):
+           if i is not index:
+               newArray[i]=copy.deepcopy(self.__items[i])
+        def decreaseSize(newSize):
+            if newSize <= (self.__physical_size//4):
+                return (self.__physical_size//2)
+            else:
+                return (self.__physical_size)
+            
     def pop(self) -> None:
-        raise NotImplementedError('Pop not implemented.')
+        self.__delitem__(len(self.__logical_size)-1)
     
     def pop_front(self) -> None:
-        raise NotImplementedError('Pop front not implemented.')
+        self.__delitem__(0)
 
     def __len__(self) -> int: 
         return self.__logical_size
@@ -147,21 +159,6 @@ class Array(IArray[T]):
             newArray.append(self.__elements[i])
         return iter(newArray)
 
-    def __delitem__(self, index: int) -> None:
-        size = decreaseSize(self.__logical_size-1)        
-        newArray = np.empty(size, dtype = self.__data_type)
-        for i in range(len(self.__items)):
-           if i is not index:
-               newArray[i]=copy.deepcopy(self.__items[i])
-        def decreaseSize(newSize):
-            if newSize <= (self.__physical_size//4):
-                return (self.__physical_size//2)
-            else:
-                return (self.__physical_size)
-
-
-           
-
     def __contains__(self, item: Any) -> bool:
         for index in range(self.__logical_size):
             if item == self.__elements[index]:
@@ -169,7 +166,10 @@ class Array(IArray[T]):
         return False
 
     def clear(self) -> None:
-        raise NotImplementedError('Clear not implemented.')
+        self.__logical_size=0
+        self.__physical_size=0
+        self.__items = np.empty(self.__physical_size, dtype = self.__data_type)
+
 
     def __str__(self) -> str:
         return '[' + ', '.join(str(item) for item in self) + ']'
