@@ -108,7 +108,7 @@ class Array(IArray[T]):
             newArrayFr[index]=copy.deepcopy(self.__items[index])
             i=index        
         self.__items= newArrayFr
-        def __grow(self,newSize: int):
+        def __grow(newSize: int):
             if newSize > self.__physical_size:
                 self.__physical_size = self.__physical_size * 2
                 newArray = np.empty(self.__physical_size, dtype=self.__data_type)
@@ -153,11 +153,11 @@ class Array(IArray[T]):
         for i in range(len(self.__items)):
            if i is not index:
                newArray[i]=copy.deepcopy(self.__items[i])
-        def decreaseSize(self,newSize):
+        def decreaseSize(newSize):
             if newSize <= (self.__physical_size//4):
-                return self.__physical_size//2
+                return (self.__physical_size//2)
             else:
-                return self.__physical_size
+                return (self.__physical_size)
 
 
            
