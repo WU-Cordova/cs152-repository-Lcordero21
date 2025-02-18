@@ -83,9 +83,6 @@ class Array(IArray[T]):
         self.__logical_size += 1
         self.__items[self.__logical_size+1]=copy.deepcopy(data)
 
-
-
-
     def append_front(self, data: T) -> None:
         self.__grow(self.__logical_size+1)
         self.__logical_size += 1
@@ -105,12 +102,13 @@ class Array(IArray[T]):
         
     def __delitem__(self, index: int) -> None:
         size = self.decreaseSize(self.__logical_size-1)       
-        newArray = np.empty(size, dtype = self.__data_type)
-        for i in range(self.__logical_size):
-           if i != index:
-               newArray[i]=copy.deepcopy(self.__items[i])
+        newArray = copy.deepcopy(self.__items)
+        newArray = np.concatenate([newArray[:index], newArray [index+1:self.__logical_size]])
+        print(newArray)
         self.__items=newArray
+        print(self.__items)
         self.__logical_size-=1 
+
 
             
     def pop(self) -> None:
