@@ -29,8 +29,11 @@ class Array(IArray[T]):
         self.__physical_size =  self.__logical_size
         self.__data_type = data_type
         self.__items = np.empty(self.__physical_size, dtype = self.__data_type)
-        if type(self.__elements[0]) != self.__data_type:
+        if not isinstance(self.__elements[0], self.__data_type):
             raise TypeError #look at this line
+
+        for index in range(self.__logical_size):
+            self.__items[index]=copy.deepcopy(self.__elements[index])
 
 
     @overload
@@ -38,16 +41,9 @@ class Array(IArray[T]):
     @overload
     def __getitem__(self, index: slice) -> Sequence[T]: ...
     def __getitem__(self, index: int | slice) -> T | Sequence[T]:
-        if isinstance(self.__data_type, int):
-            for index in range(self.__logical_size):
-                self.__items[index]=copy.deepcopy(self.__elements[index])
-        elif isinstance(self.__data_type,slice):
-            for index in range(self.__logical_size):
-                self.__items[index]=copy.deepcopy(self.__elements[index])
-        
+        arrayRange = len(self.__items)        
         if isinstance (index,int):
-            arrayRange = len(self.__items)
-            if (index > (-len(self.__items)) and (index < len(self.__items)-1)):
+            if (index > (-arrayRange) and (index < arrayRange-1)):
                 item = self.__items[index]
                 return item.item() if isinstance(item,np.generic) else item
             else:
@@ -56,7 +52,7 @@ class Array(IArray[T]):
             start = (index.start if index.start is not None else 0)
             stop = (index.stop if index.stop is not None else (len(self.__items)-1))
             step = (index.step if index.step is not None else 1) 
-            if start in range(-arrayRange,arrayRange-1) and stop in range(-arrayRange,arrayRange-1) and step in range(-arrayRange,arrayRange-1):
+            if start in range(-arrayRange,arrayRange-1) and stop in range(-arrayRange,arrayRange) and step in range(-arrayRange,arrayRange-1):
                 sliced_items= self.__items[start:stop:step]
                 return Array(starting_sequence=sliced_items.tolist(), data_type=self.__data_type)
             else:
