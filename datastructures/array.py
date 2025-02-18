@@ -43,7 +43,7 @@ class Array(IArray[T]):
     def __getitem__(self, index: int | slice) -> T | Sequence[T]:
         arrayRange = len(self.__items)        
         if isinstance (index,int):
-            if (index > (-arrayRange) and (index < arrayRange-1)):
+            if (index > (-arrayRange) and (index < arrayRange)):
                 item = self.__items[index]
                 return item.item() if isinstance(item,np.generic) else item
             else:
