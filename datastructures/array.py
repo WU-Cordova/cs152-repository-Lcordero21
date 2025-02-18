@@ -169,6 +169,7 @@ class Array(IArray[T]):
         self.__logical_size=0
         self.__physical_size=0
         self.__items = np.empty(self.__physical_size, dtype = self.__data_type)
+        self.__elements = []
 
 
     def __str__(self) -> str:
