@@ -72,31 +72,26 @@ class Array(IArray[T]):
         if type(item) != type(self.__items):
             raise TypeError
         
-    def append(self, data: T) -> None:
-        __grow(self,self.__logical_size+1)
-        self.__logical_size += 1
-        newArrayFr = np.empty(self.__physical_size, dtype=self.__data_type)
-        i=0
-        for index in range(len(self.__items)):
-            newArrayFr[index]=copy.deepcopy(self.__items[index])
-            i=index
-        newArrayFr[i+1]=copy.deepcopy(data)
-        
-        self.__items= newArrayFr
+    def __grow(self,newSize: int):
+        if newSize > self.__physical_size:
+            self.__physical_size = self.__physical_size * 2
+            newArray = np.empty(self.__physical_size, dtype=self.__data_type)
+            for index in range(len(self.__items)):
+                newArray[index]=copy.deepcopy(self.__items[index])
+            self.__items = newArray
+        else:
+            pass    
 
-        def __grow(self,newSize: int):
-            if newSize > self.__physical_size:
-                self.__physical_size = self.__physical_size * 2
-                newArray = np.empty(self.__physical_size, dtype=self.__data_type)
-                for index in range(len(self.__items)):
-                    newArray[index]=copy.deepcopy(self.__items[index])
-                self.__items = newArray
-            else:
-                pass
+    def append(self, data: T) -> None:
+        self.__grow(self.__logical_size+1)
+        self.__logical_size += 1
+        self.__items[self.__logical_size+1]=copy.deepcopy(data)
+
+
 
 
     def append_front(self, data: T) -> None:
-        __grow(self,self.__logical_size+1)
+        self.__grow(self.__logical_size+1)
         self.__logical_size += 1
         newArrayFr = np.empty(self.__physical_size, dtype=self.__data_type)
         i=0
@@ -105,28 +100,21 @@ class Array(IArray[T]):
             newArrayFr[index]=copy.deepcopy(self.__items[index])
             i=index        
         self.__items= newArrayFr
-        def __grow(newSize: int):
-            if newSize > self.__physical_size:
-                self.__physical_size = self.__physical_size * 2
-                newArray = np.empty(self.__physical_size, dtype=self.__data_type)
-                for index in range(len(self.__items)):
-                    newArray[index]=copy.deepcopy(self.__items[index])
-                self.__items = newArray
-            else:
-                pass
 
+    def decreaseSize(self,newSize):
+        if newSize <= (self.__physical_size//4):
+            return (self.__physical_size//2)
+        else:
+            return (self.__physical_size)
+        
     def __delitem__(self, index: int) -> None:
-        size = decreaseSize(self.__logical_size-1)
+        size = self.decreaseSize(self.__logical_size-1)
         self.__logical_size-=1        
         newArray = np.empty(size, dtype = self.__data_type)
         for i in range(len(self.__items)):
            if i is not index:
                newArray[i]=copy.deepcopy(self.__items[i])
-        def decreaseSize(newSize):
-            if newSize <= (self.__physical_size//4):
-                return (self.__physical_size//2)
-            else:
-                return (self.__physical_size)
+
             
     def pop(self) -> None:
         self.__delitem__(len(self.__logical_size)-1)
@@ -174,7 +162,7 @@ class Array(IArray[T]):
         return '[' + ', '.join(str(item) for item in self) + ']'
     
     def __repr__(self) -> str:
-        return f'Array {self.__str__()}, Logical: {self.__item_count}, Physical: {len(self.__items)}, type: {self.__data_type}'
+        return f'Array {self.__str__()}, Logical: {self.__logical_size}, Physical: {len(self.__items)}, type: {self.__data_type}'
     
 
 if __name__ == '__main__':
