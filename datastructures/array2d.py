@@ -36,7 +36,17 @@ class Array2D(IArray2D[T]):
 
 
     def __init__(self, starting_sequence: Sequence[Sequence[T]]=[[]], data_type=object) -> None:
-        raise NotImplementedError('Array2D.__init__ not implemented.')
+        self.data_type = data_type
+        self.rows_len = len(starting_sequence)
+        self.cols_len = len(starting_sequence[0])
+
+        py_list = []
+        for row in range(self.rows_len):
+            for col in range (self.cols_len):
+                py_list.append(starting_sequence[row][col])
+                
+
+        self.elements2d = Array(data_type=data_type)
 
     @staticmethod
     def empty(rows: int=0, cols: int=0, data_type: type=object) -> Array2D:
