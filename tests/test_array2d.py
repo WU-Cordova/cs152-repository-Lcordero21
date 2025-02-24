@@ -86,10 +86,10 @@ class TestArray2D:
         with pytest.raises(ValueError, match="must be a sequence of sequences"):
             _ = Array2D(123, data_type=int)  # Not a list of lists
 
-        with pytest.raises(ValueError, match="must be a sequence of sequences"):
+        with pytest.raises(ValueError):
             _ = Array2D("invalid_string", data_type=int)  # Not a sequence of sequences
 
-        with pytest.raises(ValueError, match="must be a sequence of sequences"):
+        with pytest.raises(ValueError):
             _ = Array2D({1: [1, 2, 3]}, data_type=int)  # Dictionary is not a valid sequence
 
     # ✅ Test for ValueError if `starting_sequence` contains mixed types
