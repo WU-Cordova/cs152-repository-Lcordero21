@@ -89,7 +89,7 @@ class Array2D(IArray2D[T]):
         raise NotImplementedError('Array2D.__reversed__ not implemented.')
     
     def __len__(self): 
-        raise NotImplementedError('Array2D.__len__ not implemented')
+        raise NotImplementedError()
                                   
     def __str__(self) -> str: 
         return f'[{", ".join(f"{str(row)}" for row in self)}]'
