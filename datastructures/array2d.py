@@ -93,13 +93,14 @@ class Array2D(IArray2D[T]):
         return Array2D.Row(row_index, self.elements2d, self.cols_len, self.data_type)
     
     def __iter__(self) -> Iterator[Sequence[T]]: 
-        raise NotImplementedError('Array2D.__iter__ not implemented.')
+        for column_index in range(self.cols_len):
+            yield self[column_index]
     
     def __reversed__(self):
         raise NotImplementedError('Array2D.__reversed__ not implemented.')
     
     def __len__(self): 
-        raise NotImplementedError()
+        return self.rows_len
                                   
     def __str__(self) -> str: 
         return f'[{", ".join(f"{str(row)}" for row in self)}]'
