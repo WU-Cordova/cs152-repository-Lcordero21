@@ -20,9 +20,9 @@ class Array2D(IArray2D[T]):
             return row_index * self.num_columns + column_index
 
         def __getitem__(self, column_index: int) -> T:
-            #if row and column are out of bounds, raise IndexError
             index: int=self.map_index(self.row_index, column_index)
-
+            if column_index >= self.num_columns:
+                raise IndexError
             return self._array[index]
         
         def __setitem__(self, column_index: int, value: T) -> None:
@@ -35,8 +35,17 @@ class Array2D(IArray2D[T]):
                 yield self[column_index]
         
         def __reversed__(self) -> Iterator[T]:
-            for column_index in range(self.num_columns-1,-1,-1):
-                yield self[column_index]
+            """for column_index in range(self.num_columns-1,-1,-1):
+                yield self[column_index]"""
+            pylist = []
+            for i in range (self.row_index-1,-1,-1):
+                templist=[]
+                for j in range(self.num_columns):
+                    templist.append(self._array[i][j])
+                pylist.append(templist)
+            self._array = Array(starting_sequence=pylist,data_type=self.data_type)
+            yield self._array
+            
 
         def __len__(self) -> int:
             return self.num_columns
@@ -90,6 +99,8 @@ class Array2D(IArray2D[T]):
         return Array2D(starting_sequence=pylist2D, data_type=data_type)
 
     def __getitem__(self, row_index: int) -> Array2D.IRow[T]: 
+        if row_index >= self.rows_len:
+            raise IndexError
         return Array2D.Row(row_index, self.elements2d, self.cols_len, self.data_type)
     
     def __iter__(self) -> Iterator[Sequence[T]]: 
@@ -97,7 +108,7 @@ class Array2D(IArray2D[T]):
             yield self[column_index]
     
     def __reversed__(self):
-        raise NotImplementedError('Array2D.__reversed__ not implemented.')
+        return Array2D.Row(self.rows_len, self.elements2d, self.cols_len, self.data_type)
     
     def __len__(self): 
         return self.rows_len
