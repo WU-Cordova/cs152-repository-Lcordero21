@@ -12,7 +12,7 @@ class Array2D(IArray2D[T]):
     class Row(IArray2D.IRow[T]):
         def __init__(self, row_index: int, array: IArray, num_columns: int, data_type: type) -> None:
             self.row_index = row_index
-            self.array = array
+            self._array = array
             self.num_columns = num_columns
             self.data_type = data_type
 
@@ -23,12 +23,12 @@ class Array2D(IArray2D[T]):
             #if row and column are out of bounds, raise IndexError
             index: int=self.map_index(self.row_index, column_index)
 
-            return self.array[index]
+            return self._array[index]
         
         def __setitem__(self, column_index: int, value: T) -> None:
             index: int=self.map_index(self.row_index, column_index)
 
-            self.array[index] = value
+            self._array[index] = value
         
         def __iter__(self) -> Iterator[T]:
             for column_index in range(self.num_columns):
@@ -71,7 +71,7 @@ class Array2D(IArray2D[T]):
                     else:
                         raise ValueError
             else:
-                raise IndexError
+                raise ValueError
 
 
         self.elements2d = Array(starting_sequence=py_list,data_type=data_type)
@@ -87,12 +87,10 @@ class Array2D(IArray2D[T]):
             for col in range(cols):
                 pylist2D[row].append(data_type())
 
-        
-
         return Array2D(starting_sequence=pylist2D, data_type=data_type)
 
     def __getitem__(self, row_index: int) -> Array2D.IRow[T]: 
-        return Array2D.Row(row_index=row_index, array=self.elements2d, num_columns=self.cols_len, data_type=self.data_type)
+        return Array2D.Row(row_index, self.elements2d, self.cols_len, self.data_type)
     
     def __iter__(self) -> Iterator[Sequence[T]]: 
         raise NotImplementedError('Array2D.__iter__ not implemented.')
@@ -107,7 +105,7 @@ class Array2D(IArray2D[T]):
         return f'[{", ".join(f"{str(row)}" for row in self)}]'
     
     def __repr__(self) -> str: 
-        return f'Array2D {self.__num_rows} Rows x {self.__num_columns} Columns, items: {str(self)}'
+        return f'Array2D {self.rows_len} Rows x {self.cols_len} Columns, items: {str(self)}'
 
 
 if __name__ == '__main__':
