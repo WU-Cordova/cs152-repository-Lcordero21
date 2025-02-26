@@ -64,10 +64,12 @@ class Array2D(IArray2D[T]):
 
         py_list = []
         for row in range(self.rows_len):
-            if len(row) == self.cols_len:
+            if len(starting_sequence[row]) == self.cols_len:
                 for col in range (self.cols_len):
                     if isinstance (starting_sequence[row][col], self.data_type):
                         py_list.append(starting_sequence[row][col])
+                    else:
+                        raise ValueError
             else:
                 raise IndexError
 
