@@ -10,10 +10,11 @@ from datastructures.iarray2d import IArray2D, T
 class Array2D(IArray2D[T]):
 
     class Row(IArray2D.IRow[T]):
-        def __init__(self, row_index: int, array: IArray, num_columns: int) -> None:
+        def __init__(self, row_index: int, array: IArray, num_columns: int, data_type: type) -> None:
             self.row_index = row_index
             self.array = array
             self.num_columns = num_columns
+            self.data_type = data_type
 
         def map_index(self, row_index: int, column_index) -> int:
             return row_index * self.num_columns + column_index
@@ -30,10 +31,12 @@ class Array2D(IArray2D[T]):
             self.array[index] = value
         
         def __iter__(self) -> Iterator[T]:
-            raise NotImplementedError('Row.__iter__ not implemented.')
+            for column_index in range(self.num_columns):
+                yield self[column_index]
         
         def __reversed__(self) -> Iterator[T]:
-            raise NotImplementedError('Row.__reversed__ not implemented.')
+            for column_index in range(self.num_columns-1,-1,-1):
+                yield self[column_index]
 
         def __len__(self) -> int:
             return self.num_columns
@@ -47,7 +50,10 @@ class Array2D(IArray2D[T]):
 
     def __init__(self, starting_sequence: Sequence[Sequence[T]]=[[]], data_type=object) -> None:
         self.data_type = data_type
-
+        if not isinstance(starting_sequence, Sequence):
+            raise  ValueError
+        if not isinstance(data_type,type):
+            raise TypeError
         #if starting_sequence is not a sequence, raise ValueError
         #if all of the rows are not sequences, then raise ValueError
         #check that the types are all the same
@@ -58,11 +64,15 @@ class Array2D(IArray2D[T]):
 
         py_list = []
         for row in range(self.rows_len):
-            for col in range (self.cols_len):
-                py_list.append(starting_sequence[row][col])
+            if len(row) == self.cols_len:
+                for col in range (self.cols_len):
+                    if isinstance (starting_sequence[row][col], self.data_type):
+                        py_list.append(starting_sequence[row][col])
+            else:
+                raise IndexError
 
 
-        self.elements2d = Array(data_type=data_type)
+        self.elements2d = Array(starting_sequence=py_list,data_type=data_type)
 
     @staticmethod
     def empty(rows: int=0, cols: int=0, data_type: type=object) -> Array2D:
@@ -80,7 +90,7 @@ class Array2D(IArray2D[T]):
         return Array2D(starting_sequence=pylist2D, data_type=data_type)
 
     def __getitem__(self, row_index: int) -> Array2D.IRow[T]: 
-        return Array2D.Row(row_index, self.elements2d, self.cols_len)
+        return Array2D.Row(row_index=row_index, array=self.elements2d, num_columns=self.cols_len, data_type=self.data_type)
     
     def __iter__(self) -> Iterator[Sequence[T]]: 
         raise NotImplementedError('Array2D.__iter__ not implemented.')
