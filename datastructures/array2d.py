@@ -20,14 +20,18 @@ class Array2D(IArray2D[T]):
             return row_index * self.num_columns + column_index
 
         def __getitem__(self, column_index: int) -> T:
-            index: int=self.map_index(self.row_index, column_index)
+            print("calling row getitem")
+            index: int = self.map_index(self.row_index, column_index)
+            print(index)
             if column_index >= self.num_columns:
                 raise IndexError
             return self._array[index]
         
         def __setitem__(self, column_index: int, value: T) -> None:
-
-            index: int=self.map_index(self.row_index, column_index)
+            print("calling set item")
+            index: int = self.map_index(self.row_index, column_index)
+            print(index)
+            print(value)
             if column_index >= self.num_columns:
                 raise IndexError
 
@@ -103,6 +107,7 @@ class Array2D(IArray2D[T]):
         return Array2D(starting_sequence=pylist2D, data_type=data_type)
 
     def __getitem__(self, row_index: int) -> Array2D.IRow[T]: 
+        print("Calling getitem")
         if row_index >= self.rows_len:
             raise IndexError
         return Array2D.Row(row_index, self.elements2d, self.cols_len, self.data_type)

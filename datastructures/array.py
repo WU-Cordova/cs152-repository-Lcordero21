@@ -67,6 +67,7 @@ class Array(IArray[T]):
             raise IndexError
         if type(item) != self.__data_type:
             raise TypeError
+        self.__items[index] = item
         
     def __grow(self,newSize: int):
         if newSize > self.__physical_size:
