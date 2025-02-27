@@ -34,6 +34,7 @@ class TestArray2D:
     def test_set_get_item(self, empty3x3: Array2D[int]) -> None:
         """Ensures values can be set and retrieved correctly."""
         empty3x3[1][1] = 42
+        print(repr(empty3x3))
         assert empty3x3[1][1] == 42
 
     # ✅ Test Row Iteration

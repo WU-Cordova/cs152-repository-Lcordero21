@@ -26,7 +26,10 @@ class Array2D(IArray2D[T]):
             return self._array[index]
         
         def __setitem__(self, column_index: int, value: T) -> None:
+
             index: int=self.map_index(self.row_index, column_index)
+            if column_index >= self.num_columns:
+                raise IndexError
 
             self._array[index] = value
         
@@ -35,16 +38,17 @@ class Array2D(IArray2D[T]):
                 yield self[column_index]
         
         def __reversed__(self) -> Iterator[T]:
-            """for column_index in range(self.num_columns-1,-1,-1):
-                yield self[column_index]"""
-            pylist = []
+            for column_index in reversed(range(self.num_columns)):
+                yield self[column_index]
+            """pylist = []
             for i in range (self.row_index-1,-1,-1):
                 templist=[]
                 for j in range(self.num_columns):
                     templist.append(self._array[i][j])
                 pylist.append(templist)
             self._array = Array(starting_sequence=pylist,data_type=self.data_type)
-            yield self._array
+            print(self._array)
+            yield self._array"""
             
 
         def __len__(self) -> int:
@@ -83,7 +87,7 @@ class Array2D(IArray2D[T]):
                 raise ValueError
 
 
-        self.elements2d = Array(starting_sequence=py_list,data_type=data_type)
+        self.elements2d = Array(py_list,self.data_type)
 
     @staticmethod
     def empty(rows: int=0, cols: int=0, data_type: type=object) -> Array2D:
@@ -102,13 +106,14 @@ class Array2D(IArray2D[T]):
         if row_index >= self.rows_len:
             raise IndexError
         return Array2D.Row(row_index, self.elements2d, self.cols_len, self.data_type)
-    
+        
     def __iter__(self) -> Iterator[Sequence[T]]: 
         for column_index in range(self.cols_len):
             yield self[column_index]
     
     def __reversed__(self):
-        return Array2D.Row(self.rows_len, self.elements2d, self.cols_len, self.data_type)
+        for column_index in reversed(range(self.cols_len)):
+            yield self[column_index]
     
     def __len__(self): 
         return self.rows_len
