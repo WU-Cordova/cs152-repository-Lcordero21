@@ -44,16 +44,6 @@ class Array2D(IArray2D[T]):
         def __reversed__(self) -> Iterator[T]:
             for column_index in reversed(range(self.num_columns)):
                 yield self[column_index]
-            """pylist = []
-            for i in range (self.row_index-1,-1,-1):
-                templist=[]
-                for j in range(self.num_columns):
-                    templist.append(self._array[i][j])
-                pylist.append(templist)
-            self._array = Array(starting_sequence=pylist,data_type=self.data_type)
-            print(self._array)
-            yield self._array"""
-            
 
         def __len__(self) -> int:
             return self.num_columns
