@@ -72,6 +72,8 @@ class Grid:
                 next_state = self.grid[row][col].next_state(num_neighbours) #implement rules here
                 next_grid[row][col].is_alive = next_state #double check
 
+        return next_grid
+
     def __eq__(self,value):
         pass
         #if isinstance(value,Grid) and self.rows == value.rows and self.cols....
