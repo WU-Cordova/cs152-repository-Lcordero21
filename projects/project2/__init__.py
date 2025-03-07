@@ -26,6 +26,7 @@ class Cell:
             self.status = 0
         else:
             pass
+        return self.status
     
     @property
     def is_alive(self)->bool: 
@@ -41,7 +42,7 @@ class Cell:
         return False
         
     def __str__(self):
-        return "🦠" if self.status else " "
+        return "🦠" if self.status else "⭕"
         
 
 class Grid:
@@ -52,10 +53,47 @@ class Grid:
 
         for row in range(rows):
             for col in range (cols):
-                self.grid[row][col].is_alive = random.choice([True,False])
+                self.grid[row][col].status = random.choice([True,False])
 
-    def get_neighbour(self):
-        raise NotImplementedError
+    def get_neighbour(self,row_index,col_index)-> int:
+        neighbours=0
+        if row_index != (self.num_rows-1): 
+            neighbours+=notInFirstOrLastCol()
+            if self.grid[row_index+1][col_index].is_alive() == True:
+                neighbours+=1
+            if self.grid[row_index+1][col_index+1].is_alive() ==True:
+                neighbours+=1
+        if row_index != "0":
+            neighbours+=notInFirstOrLastCol()
+            if self.grid[row_index-1][col_index].is_alive() == True:
+                neighbours+=1
+            if self.grid[row_index-1][col_index-1].is_alive() == True:
+                neighbours+=1
+
+
+
+        def notInFirstOrLastCol(): #a local function I created so I don't have to copy and paste this a ton in my if statement.
+            neighboursToo = 0
+            if col_index == (self.num_cols -1): 
+                if self.grid[row_index][col_index-1].is_alive()== True:
+                    neighboursToo+=1
+            elif col_index == "0":
+                if self.grid[row_index][col_index+1].is_alive() == True:
+                    neighboursToo+=1
+            else:
+                if self.grid[row_index-1][col_index+1].is_alive() == True:
+                    neighboursToo+=1
+                if self.grid[row_index+1][col_index-1].is_alive() ==True:
+                    neighboursToo+=1
+            return neighboursToo
+
+        return neighbours
+
+            
+
+
+
+
 
     def display(self):
         for row in range(self.num_rows):
@@ -71,12 +109,11 @@ class Grid:
             for col in range (self.num_cols):
                 num_neighbours = self.get_neighbour(row,col) #implement checking for neighbours here
                 next_state = self.grid[row][col].next_state(num_neighbours) #implement rules here
-                next_grid[row][col].is_alive = next_state #double check
+                next_grid[row][col].status = next_state #double check
 
         return next_grid
 
     def __eq__(self,value):
-        pass
         if isinstance(value,Grid) and self.num_rows == value.num_rows and self.num_cols == value.num_cols:
             return self.grid == value.grid
 
@@ -87,22 +124,32 @@ class GameController:
         self.grid = grid
         self.history: List[Grid] = []
 
-    def run(self):
+    def run(self):      
+        generation = 0  
+        
+        print("Press 'q' to quit, 'd' to move a generation forward, 'a' to move a generation backwards, \n 'r' to automatically run through the generations, and 's' to start manually going through the generations again!")
+
+        print("You are on Generation:", generation)
         self.grid.display()
-
-        print("Press 'q' to quit.")
-
+        self.history.append(self.grid)
         kbhit = KBHit()
 
         while True:
-            self.grid.display()
             sleep(1)
             if kbhit.kbhit():
                 key = kbhit.getch()
 
-                if key == 'q':
-                    print("you hit quit")
-                    return     
+                if key == 'd' or key == 'D':
+                    if (generation + 1)>len(self.history-1):
+                        self.grid = self.grid.nextGeneration()
+                        self.history.append(self.grid)
+                        generation+=1
+
+
+
+                if key == 'q' or key == 'Q':
+                    print("You hit quit")
+                    return
 
 
 
