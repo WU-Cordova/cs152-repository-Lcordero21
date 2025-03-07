@@ -56,38 +56,40 @@ class Grid:
                 self.grid[row][col].status = random.choice([True,False])
 
     def get_neighbour(self,row_index,col_index)-> int:
-        neighbours=0
+        self.neighbours=0
         if row_index != (self.num_rows-1): 
-            neighbours+=notInFirstOrLastCol()
-            if self.grid[row_index+1][col_index].is_alive() == True:
-                neighbours+=1
-            if self.grid[row_index+1][col_index+1].is_alive() ==True:
-                neighbours+=1
+            self.neighbours+=self.notInFirstOrLastCol(row_index,col_index)
+            if self.grid[row_index+1][col_index].status == 1:
+                self.neighbours+=1
+            if col_index != (0):
+                if self.grid[row_index+1][col_index-1].status == 1:
+                    self.neighbours+=1
+            if col_index != (self.num_cols-1):
+                if self.grid[row_index+1][col_index+1].status == 1:
+                    self.neighbours+=1
         if row_index != "0":
-            neighbours+=notInFirstOrLastCol()
-            if self.grid[row_index-1][col_index].is_alive() == True:
-                neighbours+=1
-            if self.grid[row_index-1][col_index-1].is_alive() == True:
-                neighbours+=1
+            self.neighbours+=self.notInFirstOrLastCol(row_index,col_index)
+            if self.grid[row_index-1][col_index].status == 1:
+                self.neighbours+=1
+            if col_index != (self.num_cols-1):
+                if self.grid[row_index-1][col_index+1].status == 1:
+                    self.neighbours+=1
+            if col_index != 0:
+                if self.grid[row_index-1][col_index-1].status == 1:
+                    self.neighbours+=1
+        return self.neighbours
 
 
 
-        def notInFirstOrLastCol(): #a local function I created so I don't have to copy and paste this a ton in my if statement.
-            neighboursToo = 0
-            if col_index == (self.num_cols -1): 
-                if self.grid[row_index][col_index-1].is_alive()== True:
-                    neighboursToo+=1
-            elif col_index == "0":
-                if self.grid[row_index][col_index+1].is_alive() == True:
-                    neighboursToo+=1
-            else:
-                if self.grid[row_index-1][col_index+1].is_alive() == True:
-                    neighboursToo+=1
-                if self.grid[row_index+1][col_index-1].is_alive() ==True:
-                    neighboursToo+=1
-            return neighboursToo
-
-        return neighbours
+    def notInFirstOrLastCol(self, row_index, col_index): #a local function I created so I don't have to copy and paste this a ton in my if statement.
+        neighboursToo = 0
+        if col_index == (self.num_cols -1): 
+            if self.grid[row_index][col_index-1].status == 1:
+                neighboursToo+=1
+        if col_index == "0":
+            if self.grid[row_index][col_index+1].status == 1:
+                neighboursToo+=1
+        return neighboursToo
 
     def display(self):
         for row in range(self.num_rows):
@@ -98,12 +100,13 @@ class Grid:
 
 
     def nextGeneration (self):
-        next_grid = Grid(self.num_rows,self.num_cols) #make empty array
+        next_grid = Array2D.empty(self.num_rows,self.num_cols, data_type=Cell) #make empty array
         for row in range(self.num_rows):
             for col in range (self.num_cols):
                 num_neighbours = self.get_neighbour(row,col) #implement checking for neighbours here
                 next_state = self.grid[row][col].next_state(num_neighbours) #implement rules here
                 next_grid[row][col].status = next_state #double check
+                print(num_neighbours, next_state,next_grid[row][col])
 
         return next_grid
 
@@ -141,7 +144,7 @@ class GameController:
                             self.history.append(self.grid)
                             generation+=1
                             print("You are on Generation:", generation)
-                            self.grid.display()
+                            print(self.grid)
                 if key == 'r' or key == 'R': #it needs to start running from wherever user leaves off on manual
                     while True:
                         sleep(1)
@@ -165,8 +168,7 @@ class GameController:
         #break will end the loop
 
 
-        """
-        1.Print Grid
+    """ 1.Print Grid
         2. loop until break
         3. generate next grid (itereate grid, count neighbours, run rules)
         4.Save current grid to grid history
