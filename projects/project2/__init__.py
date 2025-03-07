@@ -9,15 +9,12 @@ from datastructures.array2d import Array2D
 import random
 from time import sleep
 import time
-if os.name == 'nt':
-    import msvcrt
+from projects.project2.kbhit import *
 
 
 class Cell:
-    def __init__(self, row_index, col_index, status) -> None:
-        self.row_index = row_index
-        self.col_index = col_index
-        self.status = status
+    def __init__ (self, status: bool = False) -> None:
+        self.status = status #If cell is alive then true, if not then false
 
 
     def next_state(self, num_neighbors):
@@ -30,17 +27,21 @@ class Cell:
         else:
             pass
     
-    def aliveCellCheck(self) -> bool: #may not need this function
+    @property
+    def is_alive(self)->bool: 
         return self.status
     
-    def is_alive(self):
-        pass
+    @is_alive.setter
+    def is_alive(self, alive:bool):
+        self.alive = alive
+
     def __eq__(self,value):
-        pass
         if isinstance(value,Cell):
-            return self.alive == value.alive
+            return self.status == value.status
+        return False
         
-    #def __str__(self):
+    def __str__(self):
+        return "🦠" if self.status else " "
         
 
 class Grid:
@@ -57,17 +58,17 @@ class Grid:
         raise NotImplementedError
 
     def display(self):
-        for row in range(self.rows):
-            for col in range(self.cols):
+        for row in range(self.num_rows):
+            for col in range(self.num_cols):
                 print(self.grid[row][col], end="")
             print()
         print()
 
 
     def nextGeneration (self):
-        newGen = Grid(self.rows,self.cols) #make empty array
-        for row in range(self.rows):
-            for col in range (self.cols):
+        next_grid = Grid(self.num_rows,self.num_cols) #make empty array
+        for row in range(self.num_rows):
+            for col in range (self.num_cols):
                 num_neighbours = self.get_neighbour(row,col) #implement checking for neighbours here
                 next_state = self.grid[row][col].next_state(num_neighbours) #implement rules here
                 next_grid[row][col].is_alive = next_state #double check
@@ -76,7 +77,8 @@ class Grid:
 
     def __eq__(self,value):
         pass
-        #if isinstance(value,Grid) and self.rows == value.rows and self.cols....
+        if isinstance(value,Grid) and self.num_rows == value.num_rows and self.num_cols == value.num_cols:
+            return self.grid == value.grid
 
 class GameController:
 
