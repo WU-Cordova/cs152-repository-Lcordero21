@@ -120,7 +120,8 @@ class GameController:
 
     def run(self):      
         generation = 0  
-        
+        mode= "automatic????" #add user input asking what mode they want
+        speed="TBD" #add user input asking what speed they want (if they chose automatic)
         print("Press 'q' to quit, 'd' to move a generation forward, 'a' to move a generation backwards, \n 'r' to automatically run through the generations, and 's' to start manually going through the generations again!")
 
         print("You are on Generation:", generation)
@@ -128,39 +129,38 @@ class GameController:
         self.history.append(self.grid)
         kbhit = KBHit()
 
-        if kbhit.kbhit():
-            key = kbhit.getch()
-            stability = False
+        while True:
+            if kbhit.kbhit():
+                key = kbhit.getch()
+                stability = False
 
-            if key == 'd' or key == 'D':
-                if stability == False:
-                    if (generation + 1)>len(self.history-1):
-                        self.grid = self.grid.nextGeneration()
-                        self.history.append(self.grid)
-                        generation+=1
-                        print("You are on Generation:", generation)
-                        self.grid.display()
-            if key == 'r' or key == 'R': #it needs to start running from wherever user leaves off on manual
-                while True:
-                    sleep(1)
-                    if (generation + 1) < len(self.history-1):
-                        self.grid = self.grid.nextGeneration()
-                        self.history.append(self.grid)
-                        generation+=1
-            if key == 'q' or key == 'Q':
-                print("You hit quit")
-                return
+                if key == 'd' or key == 'D':
+                    if stability == False:
+                        if (generation + 1)>len(self.history)-1:
+                            self.grid = self.grid.nextGeneration()
+                            self.history.append(self.grid)
+                            generation+=1
+                            print("You are on Generation:", generation)
+                            self.grid.display()
+                if key == 'r' or key == 'R': #it needs to start running from wherever user leaves off on manual
+                    while True:
+                        sleep(1)
+                        if (generation + 1) < len(self.history-1):
+                            self.grid = self.grid.nextGeneration()
+                            self.history.append(self.grid)
+                            generation+=1
+                if key == 'q' or key == 'Q':
+                    print("You hit quit")
+                    return
             
-        def checkGridStability (self, index):
+    def checkGridStability (self, index): #DOUBLE CHECK!!!
             stability = True
             for row in range(self.num_rows):
                 for col in range(self.num_cols):
                     if self.grid[row][col].status != self.history[index][row][col].status:
-                        stability = False
+                        stability = False    
+        #START OUT WITH ASKING PLAYER WHAT SPEED THEY WANT AND WHAT MODE!!!!
 
-
-                           
-        #Print all Instructions here Ex: [print("Press 'q' to quit.")]
         #account for uppercase and lowercase
         #break will end the loop
 
