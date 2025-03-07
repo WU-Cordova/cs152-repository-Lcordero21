@@ -89,12 +89,6 @@ class Grid:
 
         return neighbours
 
-            
-
-
-
-
-
     def display(self):
         for row in range(self.num_rows):
             for col in range(self.num_cols):
@@ -134,23 +128,35 @@ class GameController:
         self.history.append(self.grid)
         kbhit = KBHit()
 
-        while True:
-            sleep(1)
-            if kbhit.kbhit():
-                key = kbhit.getch()
+        if kbhit.kbhit():
+            key = kbhit.getch()
+            stability = False
 
-                if key == 'd' or key == 'D':
+            if key == 'd' or key == 'D':
+                if stability == False:
                     if (generation + 1)>len(self.history-1):
                         self.grid = self.grid.nextGeneration()
                         self.history.append(self.grid)
                         generation+=1
-
-
-
-                if key == 'q' or key == 'Q':
-                    print("You hit quit")
-                    return
-
+                        print("You are on Generation:", generation)
+                        self.grid.display()
+            if key == 'r' or key == 'R': #it needs to start running from wherever user leaves off on manual
+                while True:
+                    sleep(1)
+                    if (generation + 1) < len(self.history-1):
+                        self.grid = self.grid.nextGeneration()
+                        self.history.append(self.grid)
+                        generation+=1
+            if key == 'q' or key == 'Q':
+                print("You hit quit")
+                return
+            
+        def checkGridStability (self, index):
+            stability = True
+            for row in range(self.num_rows):
+                for col in range(self.num_cols):
+                    if self.grid[row][col].status != self.history[index][row][col].status:
+                        stability = False
 
 
                            
