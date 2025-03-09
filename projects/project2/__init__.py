@@ -18,11 +18,12 @@ class Cell:
 
 
     def next_state(self, num_neighbors):
-        if num_neighbors < 2:
+        self.num_neighbors = num_neighbors
+        if self.num_neighbors < 2:
             self.status = False
-        elif num_neighbors == 3:
+        elif self.num_neighbors == 3:
             self.status = True
-        elif num_neighbors >= 4:
+        elif self.num_neighbors >= 4:
             self.status = False
         else:
             pass
@@ -77,6 +78,8 @@ class Grid:
             if col_index != 0:
                 if self.grid[row_index-1][col_index-1].status == 1:
                     self.neighbours+=1
+
+                    
         return self.neighbours
 
 
@@ -211,6 +214,7 @@ class GameController:
                                 print ("Colony is stable. Terminating simulation.")
                                 return"""
             self.grid = self.grid.nextGeneration()
+            print(self.grid)
             self.history.append(self.grid)
             generation+=1
             self.grid.display()
