@@ -51,8 +51,8 @@ class TestCircularQueue:
         assert len(full_queue) == 5
 
     def test_equal_queues(self):
-        q1 = CircularQueue(5)
-        q2 = CircularQueue(5)
+        q1 = CircularQueue(5,int)
+        q2 = CircularQueue(5,int)
         for i in range(5):
             q1.enqueue(i)
             q2.enqueue(i)

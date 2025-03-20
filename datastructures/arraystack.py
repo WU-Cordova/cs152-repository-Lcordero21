@@ -208,7 +208,16 @@ class ArrayStack(IStack[T]):
             Returns:
                 bool -- True if the stacks are equal, False otherwise.
         '''
-        raise NotImplementedError
+        if self._data_type != other._data_type:
+            return False
+        if (self._count-1) != (other._count-1):
+            return False
+        if self._stack[0] != other._stack[0]:
+            return False
+        #for i in range (self._count):
+            #if self._queue[self._front_index+i]%self._count != other._queue[other._front_index+i]%other._count:
+                #return False
+        return True
 
     def __len__(self) -> int:
         ''' Returns the number of items in the stack.
