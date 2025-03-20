@@ -65,6 +65,10 @@ class CircularQueue(IQueue[T]):
         '''
         if self._count==self._maxsize:
             raise IndexError
+        if self._count == 0 and type(item) != self._data_type:
+            self._data_type= type(item)
+            self._queue=Array([self._data_type() for _ in range (self._maxsize)],self._data_type)
+
         next_position = (self._front_index+self._count) % self._maxsize
         self._rear_index=next_position
         self._queue[next_position] = item
