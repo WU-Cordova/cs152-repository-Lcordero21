@@ -26,6 +26,7 @@ class ArrayStack(IStack[T]):
         self._maxsize=max_size
         self._data_type=data_type
         self._count=0
+        self._top= -1
         self._stack=Array([self._data_type() for _ in range (self._maxsize)],self._data_type)
 
     def push(self, item: T) -> None:
@@ -48,7 +49,12 @@ class ArrayStack(IStack[T]):
             Arguments:
                 item: T -- The item to push onto the stack.
         '''
-        raise NotImplementedError
+        if self._count == self._maxsize:
+            raise IndexError
+        self._top +=1        
+        self._stack[self._top]=item
+        self._count+=1
+
 
     def pop(self) -> T:
         ''' Pops an item from the stack.
@@ -74,7 +80,14 @@ class ArrayStack(IStack[T]):
             Returns:
                 T -- The item popped from the stack.
         '''
-        raise NotImplementedError
+        if self._count == 0:
+            raise IndexError
+        poppedOff=self._stack[self._top]
+        self._stack[self._top]=self._data_type()
+        self._count-=1
+        self._top-=1
+        return poppedOff
+
 
     def clear(self) -> None:
        ''' Clears the stack. 
@@ -90,8 +103,9 @@ class ArrayStack(IStack[T]):
                >>> print(repr(s))
                ArrayStack(5): items: []
         '''
-       raise NotImplementedError
-    
+       self._stack=Array([self._data_type() for _ in range (self._maxsize)],self._data_type)
+       self._count = 0
+       self._top = -1
     @property
     def peek(self) -> T:
         ''' Returns the top item on the stack without removing it.
@@ -121,7 +135,7 @@ class ArrayStack(IStack[T]):
                 >>> s.peek
                 IndexError('Stack is empty')
         '''
-        raise NotImplementedError
+        return (self._stack[self._top])
 
     @property
     def maxsize(self) -> int:
@@ -135,7 +149,7 @@ class ArrayStack(IStack[T]):
             Returns:
                 int: The maximum size of the stack.
         '''
-        raise NotImplementedError    
+        return self._maxsize
     @property
     def full(self) -> bool:
         ''' Returns True if the stack is full, False otherwise. 
@@ -146,7 +160,7 @@ class ArrayStack(IStack[T]):
             Returns:
                 bool: True if the stack is full, False otherwise.
         '''
-        raise NotImplementedError
+        return (self._count == self._maxsize)
 
     @property
     def empty(self) -> bool:
@@ -167,7 +181,7 @@ class ArrayStack(IStack[T]):
             Returns:
                 bool: True if the stack is empty, False otherwise.
         '''
-        raise NotImplementedError
+        return (self._count == 0)
     
     def __eq__(self, other: object) -> bool:
         ''' Compares two stacks for equality.
@@ -221,7 +235,7 @@ class ArrayStack(IStack[T]):
             Returns:
                 int -- The number of items in the stack.
         '''
-        raise NotImplementedError
+        return self._count
     
     def __contains__(self, item: T) -> bool:
         ''' Returns True if the item is in the stack, False otherwise.
@@ -248,7 +262,10 @@ class ArrayStack(IStack[T]):
             Returns:
                 bool -- True if the item is in the stack, False otherwise.
         '''
-        raise NotImplementedError
+        for i in range(self._count):
+            if item == self._stack[i]:
+                return True
+        return False
 
     def __str__(self) -> str:
         ''' Returns a string representation of the stack.
@@ -264,7 +281,7 @@ class ArrayStack(IStack[T]):
             Returns:
                 str -- A string representation of the stack.
         '''
-        return str([self.stack[i] for i in range(self._top)])
+        return str([self._stack[i] for i in range(self._count)])
     
     def __repr__(self) -> str:
         ''' Returns a string representation of the stack.
