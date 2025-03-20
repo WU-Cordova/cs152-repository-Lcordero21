@@ -30,7 +30,7 @@ class Array(IArray[T]):
         self.__data_type = data_type
         self.__items = np.empty(self.__physical_size, dtype = self.__data_type)
         if not isinstance(self.__elements[0], self.__data_type):
-            raise TypeError #look at this line
+            raise TypeError 
 
         for index in range(self.__logical_size):
             self.__items[index]=copy.deepcopy(self.__elements[index])
