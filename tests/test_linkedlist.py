@@ -18,6 +18,12 @@ class TestLinkedList:
         assert len(empty) == 1
         assert empty.back == 1
 
+    def test_append_not_empty(self, empty: ILinkedList[int]):
+        empty.append(1)
+        empty.append(2)
+        assert len(empty) == 2
+        assert empty.back == 2
+
     def test_prepend(self, empty: ILinkedList[int]) -> None:
         empty.prepend(1)
         assert len(empty) == 1

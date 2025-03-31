@@ -36,17 +36,24 @@ class LinkedList[T](ILinkedList[T]):
         if self.empty:
             #Set head and tail to new node
             self.head = self.tail = new_node
-
-            pass
         else:
             if self.tail:
                 self.tail.next = new_node
             new_node.previous = self.tail
             self.tail = new_node
-            self.count+=1
+        self.count+=1
 
     def prepend(self, item: T) -> None:
-        raise NotImplementedError("LinkedList.prepend is not implemented")
+        new_node: LinkedList.Node = LinkedList.Node(data=item)
+        if self.empty:
+            #Set head and tail to new node
+            self.head = self.tail = new_node
+        else:
+            if self.tail:
+                self.tail.next = new_node
+            new_node.previous = self.tail
+            self.tail = new_node
+        self.count+=1
 
     def insert_before(self, target: T, item: T) -> None:
         raise NotImplementedError("LinkedList.insert_before is not implemented")
@@ -72,15 +79,18 @@ class LinkedList[T](ILinkedList[T]):
 
     @property
     def back(self) -> T:
-        raise NotImplementedError("LinkedList.back is not implemented")
+        if not self.tail or self.count == 0:
+            raise ValueError ("The Linked List is Empty")
+        return self.tail.data
+        
 
     @property
     def empty(self) -> bool:
-        return self.head is None
+        return self.head is None and self.tail is None and self.count == 0
         #can also check the count 
 
     def __len__(self) -> int:
-        raise NotImplementedError("LinkedList.__len__ is not implemented")
+        return self.count
 
     def clear(self) -> None:
         raise NotImplementedError("LinkedList.clear is not implemented")
