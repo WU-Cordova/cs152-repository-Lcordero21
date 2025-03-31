@@ -15,14 +15,35 @@ class LinkedList[T](ILinkedList[T]):
         previous: Optional[LinkedList.Node] = None
 
     def __init__(self, data_type: type = object) -> None:
-        raise NotImplementedError("LinkedList.__init__ is not implemented")
+        self._data_type = data_type
+        self.head: Optional[LinkedList.Node] = None
+        self.tail: Optional[LinkedList.Node] = None
+        self.count = 0
+
 
     @staticmethod
     def from_sequence(sequence: Sequence[T], data_type: type=object) -> LinkedList[T]:
+        linked_list: LinkedList[T] = LinkedList(data_type) 
         raise NotImplementedError("LinkedList.from_sequence is not implemented")
+        #FINSIH!!
 
     def append(self, item: T) -> None:
-        raise NotImplementedError("LinkedList.append is not implemented")
+        #Check that item's type is of type data_type
+        # Instantiate a new node witht the data
+        #Append the item at the end
+        #Check if empty 
+        new_node: LinkedList.Node = LinkedList.Node(data=item)
+        if self.empty:
+            #Set head and tail to new node
+            self.head = self.tail = new_node
+
+            pass
+        else:
+            if self.tail:
+                self.tail.next = new_node
+            new_node.previous = self.tail
+            self.tail = new_node
+            self.count+=1
 
     def prepend(self, item: T) -> None:
         raise NotImplementedError("LinkedList.prepend is not implemented")
@@ -55,7 +76,8 @@ class LinkedList[T](ILinkedList[T]):
 
     @property
     def empty(self) -> bool:
-        raise NotImplementedError("LinkedList.empty is not implemented")
+        return self.head is None
+        #can also check the count 
 
     def __len__(self) -> int:
         raise NotImplementedError("LinkedList.__len__ is not implemented")
