@@ -46,7 +46,6 @@ class LinkedList[T](ILinkedList[T]):
     def prepend(self, item: T) -> None:
         new_node: LinkedList.Node = LinkedList.Node(data=item)
         if self.empty:
-            #Set head and tail to new node
             self.head = self.tail = new_node
         else:
             if self.tail:
@@ -56,6 +55,38 @@ class LinkedList[T](ILinkedList[T]):
         self.count+=1
 
     def insert_before(self, target: T, item: T) -> None:
+        # raise a TypeError if target or item are not the correct types
+        if type(target) != self._data_type:
+            raise TypeError
+        # raise a ValueError if target is not in the list
+
+        if self.head and self.head.data == target:
+            self.prepend(item)
+            return
+
+        travel = self.head
+
+        while travel is not None:
+            if travel.data == target:
+                break
+            
+            travel = travel.next
+
+        if travel is None:
+            raise ValueError (f"The target item {target} is not in the linked list")
+        
+        # Create a new_ode with "item"
+        # Set travel.previous.next to new_node
+        # Set new_node.prev to travel.prev
+        # Set new_node.next to travel
+        # Set travel.prev to new_node
+        # Increase Count
+
+        # What if target is the head? (Check first and just prepend)
+        
+        
+
+
         raise NotImplementedError("LinkedList.insert_before is not implemented")
 
     def insert_after(self, target: T, item: T) -> None:
@@ -75,7 +106,9 @@ class LinkedList[T](ILinkedList[T]):
 
     @property
     def front(self) -> T:
-        raise NotImplementedError("LinkedList.front is not implemented")
+        if not self.head or self.count == 0:
+            raise ValueError ("The Linked List is Empty")
+        return self.head.data
 
     @property
     def back(self) -> T:
