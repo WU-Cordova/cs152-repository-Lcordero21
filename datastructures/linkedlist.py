@@ -24,7 +24,6 @@ class LinkedList[T](ILinkedList[T]):
     @staticmethod
     def from_sequence(sequence: Sequence[T], data_type: type=object) -> LinkedList[T]:
         linked_list: LinkedList[T] = LinkedList(data_type) 
-        raise NotImplementedError("LinkedList.from_sequence is not implemented")
         #FINSIH!!
 
     def append(self, item: T) -> None:
@@ -75,22 +74,48 @@ class LinkedList[T](ILinkedList[T]):
         if travel is None:
             raise ValueError (f"The target item {target} is not in the linked list")
         
+        new_node: LinkedList.Node = LinkedList.Node(data=item)
         # Create a new_ode with "item"
+        travel.previous.next = new_node
         # Set travel.previous.next to new_node
+        new_node.previous = travel.previous
         # Set new_node.prev to travel.prev
+        new_node.next = travel
         # Set new_node.next to travel
         # Set travel.prev to new_node
+        travel.previous = new_node
         # Increase Count
+        count += 1
 
         # What if target is the head? (Check first and just prepend)
-        
-        
-
-
-        raise NotImplementedError("LinkedList.insert_before is not implemented")
 
     def insert_after(self, target: T, item: T) -> None:
-        raise NotImplementedError("LinkedList.insert_after is not implemented")
+                # raise a TypeError if target or item are not the correct types
+        if type(target) != self._data_type:
+            raise TypeError
+        # raise a ValueError if target is not in the list
+
+        if self.tail and self.tail.data == target:
+            self.append(item)
+            return
+
+        travel = self.head
+
+        while travel is not None:
+            if travel.data == target:
+                break
+            
+            travel = travel.next
+
+        if travel is None:
+            raise ValueError (f"The target item {target} is not in the linked list")
+        
+        new_node: LinkedList.Node = LinkedList.Node(data=item)
+        new_node.next = travel.next
+        new_node.previous = travel
+        travel.next.previous = new_node
+        travel.next = new_node
+        count += 1
 
     def remove(self, item: T) -> None:
         raise NotImplementedError("LinkedList.remove is not implemented")
