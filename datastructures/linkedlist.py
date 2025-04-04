@@ -22,7 +22,11 @@ class LinkedList[T](ILinkedList[T]):
 
 
     @staticmethod
-    def from_sequence(sequence: Sequence[T], data_type: type=object) -> LinkedList[T]:
+    def from_sequence(self,sequence: Sequence[T], data_type: type=object) -> LinkedList[T]:
+        if data_type != self._data_type:
+            raise TypeError
+        if type(sequence[0]) != self._data_type:
+            raise TypeError
         linked_list: LinkedList[T] = LinkedList(data_type) 
         #FINSIH!!
 
@@ -117,17 +121,39 @@ class LinkedList[T](ILinkedList[T]):
         travel.next = new_node
         count += 1
 
-    def remove(self, item: T) -> None:
+    def remove(self, item: T) -> None: #COMPLETE THIS
+        #iterate to find item
         raise NotImplementedError("LinkedList.remove is not implemented")
 
-    def remove_all(self, item: T) -> None:
+    def remove_all(self, item: T) -> None: #COMPLETE THIS?
         raise NotImplementedError("LinkedList.remove_all is not implemented")
 
     def pop(self) -> T:
-        raise NotImplementedError("LinkedList.pop is not implemented")
+        if self.count == 0:
+            raise IndexError #DOUBLE CHECK
+        data = self.tail.data
+        if self.tail != self.head:
+            self.tail = self.tail.previous
+            self.tail.next = None
+            count -= 1
+            return data
+        else:
+            self.head = None
+            self.tail = None
+            count -= 1
+            return data
 
     def pop_front(self) -> T:
-        raise NotImplementedError("LinkedList.pop_front is not implemented")
+        if self.count == 0:
+            raise IndexError #DOUBLE CHECK
+        data = self.head.data
+        if self.tail != self.head:
+            self.head = self.head.next
+            self.head.previous = None
+        elif self.tail == self.head:
+            self.head = self.tail = None
+        count -= 1
+        return data
 
     @property
     def front(self) -> T:
@@ -157,13 +183,24 @@ class LinkedList[T](ILinkedList[T]):
         raise NotImplementedError("LinkedList.__contains__ is not implemented")
 
     def __iter__(self) -> ILinkedList[T]:
-        raise NotImplementedError("LinkedList.__iter__ is not implemented")
+        self.travel_node = self.head
+        return self
 
     def __next__(self) -> T:
-        raise NotImplementedError("LinkedList.__next__ is not implemented")
+        #T is the item
+        if self.travel_node is None:
+            raise StopIteration
+        data = self.travel_node.data
+        self.travel_node = self.travel_node.next
+        return data
+        
     
     def __reversed__(self) -> ILinkedList[T]:
-        raise NotImplementedError("LinkedList.__reversed__ is not implemented")
+        if self.travel_node is None:
+            raise StopIteration
+        data = self.travel_node.data
+        self.travel_node = self.travel_node.previous
+        return data
     
     def __eq__(self, other: object) -> bool:
         raise NotImplementedError("LinkedList.__eq__ is not implemented")
