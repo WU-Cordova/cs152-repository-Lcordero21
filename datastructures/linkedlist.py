@@ -22,19 +22,24 @@ class LinkedList[T](ILinkedList[T]):
 
 
     @staticmethod
-    def from_sequence(self,sequence: Sequence[T], data_type: type=object) -> LinkedList[T]:
-        if data_type != self._data_type:
+    def from_sequence(sequence: Sequence[T], data_type: type=object) -> LinkedList[T]:
+        for item in sequence:
+            if not isinstance(item, data_type):
+                raise TypeError
+        if sequence is None:
             raise TypeError
-        if type(sequence[0]) != self._data_type:
-            raise TypeError
+    
         linked_list: LinkedList[T] = LinkedList(data_type) 
-        #FINSIH!!
+        for item in sequence:
+            linked_list.append(item)
+        return linked_list
+
 
     def append(self, item: T) -> None:
-        #Check that item's type is of type data_type
+        # Check that item's type is of type data_type
         # Instantiate a new node witht the data
-        #Append the item at the end
-        #Check if empty 
+        # Append the item at the end
+        # Check if empty 
         new_node: LinkedList.Node = LinkedList.Node(data=item)
         if self.empty:
             #Set head and tail to new node
@@ -89,7 +94,7 @@ class LinkedList[T](ILinkedList[T]):
         # Set travel.prev to new_node
         travel.previous = new_node
         # Increase Count
-        count += 1
+        self.count += 1
 
         # What if target is the head? (Check first and just prepend)
 
@@ -119,7 +124,7 @@ class LinkedList[T](ILinkedList[T]):
         new_node.previous = travel
         travel.next.previous = new_node
         travel.next = new_node
-        count += 1
+        self.count += 1
 
     def remove(self, item: T) -> None: #COMPLETE THIS
         #iterate to find item
@@ -135,12 +140,12 @@ class LinkedList[T](ILinkedList[T]):
         if self.tail != self.head:
             self.tail = self.tail.previous
             self.tail.next = None
-            count -= 1
+            self.count -= 1
             return data
         else:
             self.head = None
             self.tail = None
-            count -= 1
+            self.count -= 1
             return data
 
     def pop_front(self) -> T:
@@ -152,19 +157,19 @@ class LinkedList[T](ILinkedList[T]):
             self.head.previous = None
         elif self.tail == self.head:
             self.head = self.tail = None
-        count -= 1
+        self.count -= 1
         return data
 
     @property
     def front(self) -> T:
         if not self.head or self.count == 0:
-            raise ValueError ("The Linked List is Empty")
+            raise IndexError ("The Linked List is Empty")
         return self.head.data
 
     @property
     def back(self) -> T:
         if not self.tail or self.count == 0:
-            raise ValueError ("The Linked List is Empty")
+            raise IndexError ("The Linked List is Empty")
         return self.tail.data
         
 
@@ -183,7 +188,6 @@ class LinkedList[T](ILinkedList[T]):
         raise NotImplementedError("LinkedList.__contains__ is not implemented")
 
     def __iter__(self) -> ILinkedList[T]:
-        self.travel_node = self.head
         return self
 
     def __next__(self) -> T:
@@ -196,11 +200,11 @@ class LinkedList[T](ILinkedList[T]):
         
     
     def __reversed__(self) -> ILinkedList[T]:
-        if self.travel_node is None:
-            raise StopIteration
-        data = self.travel_node.data
-        self.travel_node = self.travel_node.previous
-        return data
+        travel= self.tail
+        while travel is not None:
+            yield travel.data
+        travel = travel.previous
+        return travel.data
     
     def __eq__(self, other: object) -> bool:
         raise NotImplementedError("LinkedList.__eq__ is not implemented")
