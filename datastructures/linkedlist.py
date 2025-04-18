@@ -185,13 +185,23 @@ class LinkedList[T](ILinkedList[T]):
         raise NotImplementedError("LinkedList.clear is not implemented")
 
     def __contains__(self, item: T) -> bool:
-        raise NotImplementedError("LinkedList.__contains__ is not implemented")
+        if not isinstance (item,self._data_type):
+            raise TypeError
+        travel_node= self.head
+        while travel_node:
+            if item == travel_node.data:
+                return True
+            travel_node = travel_node.next
+        return False
+
 
     def __iter__(self) -> ILinkedList[T]:
+
+        self.travel_node = self.head
+
         return self
 
     def __next__(self) -> T:
-        #T is the item
         if self.travel_node is None:
             raise StopIteration
         data = self.travel_node.data
@@ -204,7 +214,7 @@ class LinkedList[T](ILinkedList[T]):
         while travel is not None:
             yield travel.data
         travel = travel.previous
-        return travel.data
+        raise StopIteration
     
     def __eq__(self, other: object) -> bool:
         raise NotImplementedError("LinkedList.__eq__ is not implemented")
