@@ -238,11 +238,10 @@ class LinkedList[T](ILinkedList[T]):
         
     
     def __reversed__(self) -> ILinkedList[T]: #FINISH
-        if self.travel_node is None:
-            raise StopIteration
-        data = self.travel_node.data
-        self.travel_node = self.travel_node.previous
-        yield data
+        self.travel_node = self.tail
+        while self.travel_node:
+            yield self.travel_node.data
+            self.travel_node = self.travel_node.previous
     
     def __eq__(self, other: object) -> bool:
         if self._data_type != other._data_type:

@@ -2,9 +2,9 @@ import os
 from datastructures.istack import IStack
 from typing import Generic
 
-from datastructures.linkedlist import LinkedList
+from datastructures.linkedlist import LinkedList, T
 
-class ListStack[T](Generic[T], IStack[T]):
+class ListStack[T](Generic[T], IStack[T]): #might be able to write it as "ListStack(IStack[T])"
     """
     ListStack (LinkedList-based Stack)
 
@@ -18,7 +18,10 @@ class ListStack[T](Generic[T], IStack[T]):
             data_type (type): The type of data the stack will hold.
 
         """
-        raise NotImplementedError("ListStack.__init__ is not implemented.")
+
+        self.count = 0
+        self.data_type= data_type
+        self._list = LinkedList(self.data_type)
 
     def push(self, item: T):
         """
@@ -31,7 +34,11 @@ class ListStack[T](Generic[T], IStack[T]):
             TypeError: If the item is not of the correct type.
 
         """
-        raise NotImplementedError("ListStack.push is not implemented.")
+        if not isinstance (item, self.data_type):
+            raise TypeError
+        
+        self._list.append(item) 
+        self.count+=1
 
     def pop(self) -> T:
         """
@@ -43,7 +50,10 @@ class ListStack[T](Generic[T], IStack[T]):
         Raises:
             IndexError: If the stack is empty.
         """
-        raise NotImplementedError("ListStack.pop is not implemented.")
+        #if self.count == 0:
+            #raise IndexError
+        self._list.pop()
+        
 
     def peek(self) -> T:
         """
