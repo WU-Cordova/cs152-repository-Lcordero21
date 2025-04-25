@@ -52,6 +52,7 @@ class ListStack[T](Generic[T], IStack[T]): #might be able to write it as "ListSt
         """
         #if self.count == 0:
             #raise IndexError
+        self.count-=1
         self._list.pop()
         
 
@@ -65,6 +66,7 @@ class ListStack[T](Generic[T], IStack[T]): #might be able to write it as "ListSt
         Raises:
             IndexError: If the stack is empty.
         """
+        
         raise NotImplementedError("ListStack.peek is not implemented.")
 
     @property
@@ -116,7 +118,7 @@ class ListStack[T](Generic[T], IStack[T]): #might be able to write it as "ListSt
         Returns:
             int: The number of items in the stack.
         """
-        raise NotImplementedError("ListStack.__len__ is not implemented.")
+        return self.count
 
     def __str__(self) -> str:
         """

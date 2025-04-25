@@ -17,7 +17,9 @@ class Deque[T](IQueue[T]):
         Args:
             - data_type (type): The type of data the deque will hold.
         """
-        raise NotImplementedError("Deque initialization is not implemented.")
+        self._data_type = data_type
+        self._count = 0
+        self._list = LinkedList(data_type)
 
     def enqueue(self, item: T) -> None:
         """
@@ -29,7 +31,9 @@ class Deque[T](IQueue[T]):
         Raises:
             - TypeError: If the item is not of the correct type.
         """
-        raise NotImplementedError("Method to add an item to the back of the deque is not implemented.")
+        if not isinstance (item, self._data_type):
+            raise TypeError
+        self._list.append(item)
 
     def dequeue(self) -> T:
         """
@@ -41,7 +45,10 @@ class Deque[T](IQueue[T]):
         Raises:
             - IndexError: If the deque is empty.
         """
-        raise NotImplementedError("Method to remove an item from the front of the deque is not implemented.")
+        if self._count == 0:
+            raise IndexError
+        self._list.pop_front()
+        self._count-=1
 
     def enqueue_front(self, item: T) -> None:
         """
@@ -53,7 +60,10 @@ class Deque[T](IQueue[T]):
         Raises:
             - TypeError: If the item is not of the correct type.
         """
-        raise NotImplementedError("Method to add an item to the front of the deque is not implemented.")
+        if not isinstance (item, self._data_type):
+            raise TypeError
+        self._count+=1
+        self._list.prepend()
 
     def dequeue_back(self) -> T:
         """
@@ -65,6 +75,9 @@ class Deque[T](IQueue[T]):
         Raises:
             - IndexError: If the deque is empty.
         """
+        if self._list == 0:
+            raise IndexError
+        
         raise NotImplementedError("Method to remove an item from the back of the deque is not implemented.")
 
     def front(self) -> T:
@@ -98,7 +111,7 @@ class Deque[T](IQueue[T]):
         Returns:
             - bool: True if the deque is empty, False otherwise.
         """
-        raise NotImplementedError("Method to check if the deque is empty is not implemented.")
+        return self._count == 0
 
     def __len__(self) -> int:
         """
@@ -107,7 +120,7 @@ class Deque[T](IQueue[T]):
         Returns:
             - int: The number of items in the deque.
         """
-        raise NotImplementedError("Method to get the length of the deque is not implemented.")
+        return self._count
     
     def __contains__(self, item: T) -> bool:
         """
