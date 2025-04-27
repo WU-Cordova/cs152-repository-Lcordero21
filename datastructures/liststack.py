@@ -21,6 +21,7 @@ class ListStack[T](Generic[T], IStack[T]): #might be able to write it as "ListSt
 
         self.count = 0
         self.data_type= data_type
+        self._head= None
         self._list = LinkedList(self.data_type)
 
     def push(self, item: T):
@@ -50,8 +51,8 @@ class ListStack[T](Generic[T], IStack[T]): #might be able to write it as "ListSt
         Raises:
             IndexError: If the stack is empty.
         """
-        #if self.count == 0:
-            #raise IndexError
+        if self.count == 0:
+            raise IndexError
         self.count-=1
         self._list.pop()
         

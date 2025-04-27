@@ -178,7 +178,7 @@ class LinkedList[T](ILinkedList[T]):
 
     def pop_front(self) -> T:
         if self.count == 0:
-            raise IndexError #DOUBLE CHECK
+            raise IndexError 
         data = self.head.data
         if self.tail != self.head:
             self.head = self.head.next
