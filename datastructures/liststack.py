@@ -4,7 +4,7 @@ from typing import Generic
 
 from datastructures.linkedlist import LinkedList, T
 
-class ListStack[T](Generic[T], IStack[T]): #might be able to write it as "ListStack(IStack[T])"
+class ListStack(Generic[T], IStack[T]): #might be able to write it as "ListStack(IStack[T])"
     """
     ListStack (LinkedList-based Stack)
 
@@ -67,8 +67,8 @@ class ListStack[T](Generic[T], IStack[T]): #might be able to write it as "ListSt
             IndexError: If the stack is empty.
         """
         if self.count == 0:
-            return IndexError
-        return self._list.front
+            raise IndexError
+        return self._list.back
 
     @property
     def empty(self) -> bool:
