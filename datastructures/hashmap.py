@@ -10,16 +10,25 @@ from datastructures.linkedlist import LinkedList
 class HashMap(IHashMap[KT, VT]):
 
     def __init__(self, number_of_buckets=7, load_factor=0.75, custom_hash_function: Optional[Callable[[KT], int]]=None) -> None:
-        raise NotImplementedError("HashMap.__init__() is not implemented yet.")
+        self._buckets: Array[LinkedList[Tuple[KT,VT]]] = \
+            Array(starting_sequence=[LinkedList(data_type=tuple) for _ in range(number_of_buckets)],
+                  data_type=LinkedList)
+        self._count: int = 0
+        self.load_factor: float = load_factor
+        self._hash_function = custom_hash_function or self._default_hash_function
+
+    def _get_bucket_index (self, key:KT, bucket_size: int) -> int:
+        bucket_index = self._hash_function(key)
+        return bucket_index % bucket_size
 
     def __getitem__(self, key: KT) -> VT:
-        raise NotImplementedError("HashMap.__getitem__() is not implemented yet.")
+        for (k,v) 
 
     def __setitem__(self, key: KT, value: VT) -> None:        
         raise NotImplementedError("HashMap.__setitem__() is not implemented yet.")
 
     def keys(self) -> Iterator[KT]:
-        raise
+        raise NotImplementedError
     
     def values(self) -> Iterator[VT]:
         raise NotImplementedError("HashMap.values() is not implemented yet.")
@@ -31,10 +40,16 @@ class HashMap(IHashMap[KT, VT]):
         raise NotImplementedError("HashMap.__delitem__() is not implemented yet.")
     
     def __contains__(self, key: KT) -> bool:
-        raise NotImplementedError("HashMap.__contains__() is not implemented yet.")
+        bucket_index: int = self._get_bucket_index(key, len(self.buckets))
+        bucket_chain: LinkedList = self._buckets(bucket_index)
+        for (k,v) in bucket_chain:
+            if k == key:
+                return True
+            
+        return False
     
     def __len__(self) -> int:
-        raise NotImplementedError("HashMap.__len__() is not implemented yet.")
+        return self._count
     
     def __iter__(self) -> Iterator[KT]:
         raise NotImplementedError("HashMap.__iter__() is not implemented yet.")
