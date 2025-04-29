@@ -25,7 +25,8 @@ class HashMap(IHashMap[KT, VT]):
         for (k,v) in self._buckets[self._get_bucket_index(key, len(self._buckets))]:
             if k == key:
                 return v
-        raise IndexError
+        raise KeyError
+    
     def _resize():
         pass 
     #FINISH
@@ -41,7 +42,7 @@ class HashMap(IHashMap[KT, VT]):
 
     def __setitem__(self, key: KT, value: VT) -> None:        
         if self._count / len(self._buckets) >= self._load_factor:
-            pass #FINISH
+            self._resize()
 
 
     def keys(self) -> Iterator[KT]:
