@@ -27,8 +27,9 @@ class HashMap(IHashMap[KT, VT]):
                 return v
         raise KeyError
     
-    def _resize():
-        pass 
+    def _resize(self):
+        temp_var = self._buckets
+        
     #FINISH
 
     def _next_prime (n: int) -> int:
@@ -69,7 +70,7 @@ class HashMap(IHashMap[KT, VT]):
         return self._count
     
     def __iter__(self) -> Iterator[KT]:
-        raise NotImplementedError("HashMap.__iter__() is not implemented yet.")
+        return iter(self._buckets)
     
     def __eq__(self, other: object) -> bool:
         raise NotImplementedError("HashMap.__eq__() is not implemented yet.")
