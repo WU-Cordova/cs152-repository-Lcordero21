@@ -133,7 +133,7 @@ class Array(IArray[T]):
         return True
     
     def __iter__(self) -> Iterator[T]:
-        return iter(self.__elements)
+        return iter(self.__items)
 
     def __reversed__(self) -> Iterator[T]:
         newArray = []

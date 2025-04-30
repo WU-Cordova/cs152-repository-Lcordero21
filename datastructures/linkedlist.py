@@ -137,8 +137,14 @@ class LinkedList[T](ILinkedList[T]):
         if not isinstance (item, self._data_type):
             raise TypeError
         travel_node= self.head
+        if item == self.head.data:
+            self.pop_front()
+            return
         while travel_node is not None:
             if travel_node.data == item:
+                if travel_node == self.tail:
+                    self.pop()
+                    return
                 travel_node.previous.next = travel_node.next
                 travel_node.next.previous = travel_node.previous
                 self.count-=1

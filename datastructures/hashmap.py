@@ -28,14 +28,32 @@ class HashMap(IHashMap[KT, VT]):
         raise KeyError
     
     def _resize(self):
-        temp_var = self._buckets
+        next_size = self._next_prime(len(self._buckets)*2)
+        new_array: Array[LinkedList[Tuple[KT,VT]]] = \
+            Array(starting_sequence=[LinkedList(data_type=tuple) for _ in range(next_size)],
+                  data_type=LinkedList) 
+        for bucket in self._buckets:
+            for (k,v) in bucket:
+                index = self._get_bucket_index(k,next_size)
+                new_array[index].append((k,v))
+        self._buckets = new_array
         
-    #FINISH
 
-    def _next_prime (n: int) -> int:
+        #create new array instead with new size instead of using number_of_buckets
+        #use next_prime() to find next size
+        
+
+    def _next_prime (self, n: int) -> int:
 
         def is_prime(num:int) -> bool:
-            pass #FINISH
+            #check if num is less than 2 (return False), check all values between 2 and num to the power of 1/2 plus 1,
+            #if num mod i == 0 then return False, because it's not a prime number. Return True after the for loop.
+            if num < 2:
+                return False
+            for i in range (2, int(num**.5)+1):
+                if num % i == 0:
+                    return False
+            return True
 
         while not is_prime(n):
             n+=1
@@ -44,23 +62,49 @@ class HashMap(IHashMap[KT, VT]):
     def __setitem__(self, key: KT, value: VT) -> None:        
         if self._count / len(self._buckets) >= self._load_factor:
             self._resize()
+        hash_bucket = self._buckets[self._get_bucket_index(key, len(self._buckets))]
+        for (k,v) in hash_bucket:
+            if k == key:
+                hash_bucket.remove((k,v))
+                self._count -= 1
+        hash_bucket.append((key,value))
+        self._count += 1
+            
 
 
     def keys(self) -> Iterator[KT]:
-        raise NotImplementedError
+        #for loop to go through each bucket (use k,_) and a second for loop to go through linked list, and
+        #  yield the first part of the tuple (key, value)
+        for bucket in self._buckets:
+            for (k,_) in bucket:
+                yield k
     
     def values(self) -> Iterator[VT]:
-        raise NotImplementedError("HashMap.values() is not implemented yet.")
+        #same as keys() but with other half of tuple
+        for bucket in self._buckets:
+            for (_,v) in bucket:
+                yield v
 
     def items(self) -> Iterator[Tuple[KT, VT]]:
-        raise NotImplementedError("HashMap.items() is not implemented yet.")
+        #yield the tuple (k,v)
+        for bucket in self._buckets:
+            for (k,v) in bucket:
+                yield (k,v)
             
     def __delitem__(self, key: KT) -> None:
-        raise NotImplementedError("HashMap.__delitem__() is not implemented yet.")
+        #be sure to find the value (using get_item) before properly removing the item, can use get bucket 
+        # using the key, then use .remove on the key value pair
+        hash_bucket = self._buckets[self._get_bucket_index(key, len(self._buckets))]
+        for (k,v) in hash_bucket:
+            if k == key:
+                hash_bucket.remove((k,v))
+                self._count -= 1
+                return
+        raise KeyError
     
     def __contains__(self, key: KT) -> bool:
         bucket_index: int = self._get_bucket_index(key, len(self._buckets))
-        bucket_chain: LinkedList = self._buckets(bucket_index)
+        bucket_chain: LinkedList = self._buckets[bucket_index]
         for (k,v) in bucket_chain:
             if k == key:
                 return True
@@ -70,10 +114,27 @@ class HashMap(IHashMap[KT, VT]):
         return self._count
     
     def __iter__(self) -> Iterator[KT]:
-        return iter(self._buckets)
+        #exact same as the keys function, just yield the keys
+        for bucket in self._buckets:
+            for (k,_) in bucket:
+                yield k
     
     def __eq__(self, other: object) -> bool:
-        raise NotImplementedError("HashMap.__eq__() is not implemented yet.")
+        #start with checking length and type, and if the key in one is in the other (using the contains function; "in")
+        if not isinstance (other, HashMap):
+            return False
+        if self._count != other._count:
+            return False
+        if len(self._buckets) != len(other._buckets):
+            return False
+        
+        for bucket in self._buckets:
+            for (k,v) in bucket:
+                if k not in other:
+                    return False
+                if v != other[k]:
+                    return False
+        return True
 
     def __str__(self) -> str:
         return "{" + ", ".join(f"{key}: {value}" for key, value in self) + "}"
