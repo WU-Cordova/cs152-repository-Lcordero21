@@ -65,8 +65,8 @@ class Array(IArray[T]):
         arrayRange= len(self.__items)
         if index not in range(-arrayRange,arrayRange):
             raise IndexError
-        if type(item) != self.__data_type:
-            raise TypeError
+        #if type(item) != self.__data_type:
+           # raise TypeError
         self.__items[index] = item
         
     def __grow(self,newSize: int):
